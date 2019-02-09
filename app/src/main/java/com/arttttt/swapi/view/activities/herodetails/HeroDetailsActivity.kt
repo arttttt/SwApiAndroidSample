@@ -20,7 +20,14 @@ class HeroDetailsActivity : AppCompatActivity(), HeroDetailsContract.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hero_details)
 
+        presenter.attachView(this)
         presenter.initialize()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        presenter.detachView()
     }
 
     override fun initializeUI() {

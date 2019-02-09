@@ -1,5 +1,6 @@
 package com.arttttt.swapi.presenter.heroes
 
+import com.arttttt.swapi.model.hero.Hero
 import com.arttttt.swapi.model.hero.repository.HeroRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -39,6 +40,12 @@ class HeroesPresenter(private val heroRepository: HeroRepository): HeroesContrac
                         view.showMessage(message)
                     }
                 })
+        }
+    }
+
+    override fun openHeroDetails(sharedViewId: Int, position: Int, hero: Hero) {
+        mView?.let { view ->
+            view.startDetailsActivity(sharedViewId, position, hero)
         }
     }
 }

@@ -32,26 +32,7 @@ class HeroesFragment: BaseFragment<HeroesContract.View, HeroesContract.Presenter
     override fun initializeUI(view: View) {
         heroRecycler.layoutManager = LinearLayoutManager(context)
         heroesAdapter = HeroesAdapter { hero, sharedViewId, position ->
-            heroRecycler
-                .layoutManager
-                ?.findViewByPosition(position)
-                ?.findViewById<View>(sharedViewId)
-                ?.let { view ->
-                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        activity!!,
-                        view,
-                        "hero_name"
-                    )
-
-                    val extra = Bundle().apply {
-                        putParcelable(HeroDetailsActivity.HeroExtra, hero)
-                    }
-
-                    ActivityUtils.startActivity<HeroDetailsActivity>(context!!,
-                        options.toBundle(),
-                        extra,
-                        0)
-                }
+            presenter.openHeroDetails(sharedViewId, position, hero)
         }
         heroRecycler.adapter = heroesAdapter
 
@@ -83,5 +64,28 @@ class HeroesFragment: BaseFragment<HeroesContract.View, HeroesContract.Presenter
         messageTextView.visibility = View.VISIBLE
 
         messageTextView.text = message
+    }
+
+    override fun startDetailsActivity(sharedViewId: Int, position: Int, hero: Hero) {
+        heroRecycler
+            .layoutManager
+            ?.findViewByPosition(position)
+            ?.findViewById<View>(sharedViewId)
+            ?.let { view ->
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    activity!!,
+                    view,
+                    "hero_name"
+                )
+
+                val extra = Bundle().apply {
+                    putParcelable(HeroDetailsActivity.HeroExtra, hero)
+                }
+
+                ActivityUtils.startActivity<HeroDetailsActivity>(context!!,
+                    options.toBundle(),
+                    extra,
+                    0)
+            }
     }
 }
