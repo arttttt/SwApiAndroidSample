@@ -2,6 +2,8 @@ package com.arttttt.swapisamplemvi.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.arttttt.swapisamplemvi.data.database.dao.HeroesDao
+import com.arttttt.swapisamplemvi.data.database.model.HeroDbModel
 
 @Database(
     entities = [

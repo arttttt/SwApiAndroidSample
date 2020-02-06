@@ -1,4 +1,4 @@
-package com.arttttt.swapisamplemvi.data.database
+package com.arttttt.swapisamplemvi.data.database.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

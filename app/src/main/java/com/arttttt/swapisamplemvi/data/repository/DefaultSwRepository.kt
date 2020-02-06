@@ -1,7 +1,7 @@
 package com.arttttt.swapisamplemvi.data.repository
 
-import com.arttttt.swapisamplemvi.data.database.HeroDbModel
-import com.arttttt.swapisamplemvi.data.database.HeroesDao
+import com.arttttt.swapisamplemvi.data.database.model.HeroDbModel
+import com.arttttt.swapisamplemvi.data.database.dao.HeroesDao
 import com.arttttt.swapisamplemvi.data.network.api.SwApi
 import com.arttttt.swapisamplemvi.domain.entity.Hero
 import com.arttttt.swapisamplemvi.domain.repository.SwRepository
@@ -25,7 +25,11 @@ class DefaultSwRepository(
             .searchHero()
             .flatMap { response ->
                 heroesDao
-                    .insertHeroes(*response.results.map { hero -> HeroDbModel(hero.name) }.toTypedArray())
+                    .insertHeroes(*response.results.map { hero ->
+                        HeroDbModel(
+                            hero.name
+                        )
+                    }.toTypedArray())
                     .toSingleDefault(Unit)
             }
             .flatMap { heroesDao.getAllHeroes() }
