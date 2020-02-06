@@ -27,7 +27,18 @@ class DefaultSwRepository(
                 heroesDao
                     .insertHeroes(*response.results.map { hero ->
                         HeroDbModel(
-                            hero.name
+                            name = hero.name,
+                            birthYear = hero.birthYear,
+                            created = hero.created,
+                            edited = hero.edited,
+                            eyeColor = hero.eyeColor,
+                            gender = hero.gender,
+                            hairColor = hero.hairColor,
+                            height = hero.height,
+                            homeWorld = hero.homeWorld,
+                            mass = hero.mass,
+                            skinColor = hero.skinColor,
+                            url = hero.url
                         )
                     }.toTypedArray())
                     .toSingleDefault(Unit)
