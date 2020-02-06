@@ -12,6 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.internal.disposables.DisposableContainer
+import kotlinx.android.extensions.LayoutContainer
 import org.koin.core.KoinComponent
 
 abstract class MviView<Event: UiEvent, VM: ViewModel> private constructor(
@@ -21,12 +22,15 @@ abstract class MviView<Event: UiEvent, VM: ViewModel> private constructor(
     ObservableSource<Event> by uiEvents,
     Consumer<VM> by states,
     DisposableContainer by CompositeDisposable(),
+    LayoutContainer,
     KoinComponent
 {
     constructor(): this(PublishRelay.create(), PublishRelay.create())
 
     @get:LayoutRes
     abstract val layoutRes: Int
+
+    override lateinit var containerView: View
 
     protected fun Disposable.putToBag() {
         add(this)
@@ -37,8 +41,11 @@ abstract class MviView<Event: UiEvent, VM: ViewModel> private constructor(
     }
 
     fun createView(inflater: LayoutInflater, container: ViewGroup?): View {
-        return inflater.inflate(layoutRes, container, false).apply(::onViewCreated)
+        return inflater.inflate(layoutRes, container, false).apply {
+            containerView = this
+            onViewCreated()
+        }
     }
 
-    open fun onViewCreated(view: View) {}
+    open fun onViewCreated() {}
 }

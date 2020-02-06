@@ -1,44 +1,52 @@
 package com.arttttt.swapisamplemvi.ui.heroeslist
 
-import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.arttttt.swapisamplemvi.R
 import com.arttttt.swapisamplemvi.ui.base.MviView
 import com.arttttt.swapisamplemvi.ui.base.UiEvent
-import com.arttttt.swapisamplemvi.ui.base.recyclerview.IListItem
 import com.arttttt.swapisamplemvi.ui.base.recyclerview.ListDifferAdapter
 import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroAdapterDelegate
+import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroItemListener
 import com.badoo.mvicore.byValue
 import com.badoo.mvicore.modelWatcher
-import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 import com.jakewharton.rxbinding3.swiperefreshlayout.refreshes
+import io.reactivex.functions.Consumer
+import kotlinx.android.synthetic.main.fragment_list.*
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
 class HeroesListView: MviView<HeroesListView.HeroesListUiEvent, HeroesListViewModel>() {
 
     sealed class HeroesListUiEvent: UiEvent {
         object Refresh: HeroesListUiEvent()
+        object HeroClicked: HeroesListUiEvent()
     }
 
     override val layoutRes: Int = R.layout.fragment_list
 
-    private val adapter: ListDifferAdapter by inject { parametersOf(setOf(HeroAdapterDelegate()), null) }
+    private val adapter: ListDifferAdapter by inject {
+        parametersOf(
+            setOf(
+                HeroAdapterDelegate(
+                    object: HeroItemListener {
+                        override val clicks: Consumer<Unit> = Consumer {
+                            uiEvents.accept(HeroesListUiEvent.HeroClicked)
+                        }
+                    }
+                )
+            ),
+            null
+        )
+    }
 
-    override fun onViewCreated(view: View) {
-        super.onViewCreated(view)
+    override fun onViewCreated() {
+        super.onViewCreated()
 
-        val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout).apply {
-            refreshes()
-                .map { HeroesListUiEvent.Refresh }
-                .emitUiEvent()
-        }
+        refreshLayout
+            .refreshes()
+            .map { HeroesListUiEvent.Refresh }
+            .emitUiEvent()
 
-        view.findViewById<RecyclerView>(R.id.rvHeroes).apply {
-            this.adapter = this@HeroesListView.adapter
-        }
+        rvHeroes.adapter = adapter
 
         val watcher = modelWatcher<HeroesListViewModel> {
             watch(HeroesListViewModel::isLoading, byValue(), refreshLayout::setRefreshing)

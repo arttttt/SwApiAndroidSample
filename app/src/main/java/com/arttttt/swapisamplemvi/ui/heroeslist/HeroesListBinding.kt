@@ -5,6 +5,7 @@ import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature
 import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroAdapterItem
 import com.badoo.mvicore.android.AndroidBindings
 import com.badoo.mvicore.binder.using
+import timber.log.Timber
 
 class HeroesListBinding(
     lifecycleOwner: LifecycleOwner,
@@ -20,6 +21,10 @@ class HeroesListBinding(
         binder.bind(view to heroesFeature using { event ->
             when (event) {
                 is HeroesListView.HeroesListUiEvent.Refresh -> HeroesFeature.Wish.RefreshHeroes
+                is HeroesListView.HeroesListUiEvent.HeroClicked -> {
+                    Timber.e("ignored")
+                    null
+                }
             }
         })
     }
