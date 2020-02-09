@@ -1,19 +1,22 @@
 package com.arttttt.swapisamplemvi.feature.heroesfeature
 
+import android.os.Bundle
 import com.arttttt.swapisamplemvi.domain.entity.Hero
 import com.arttttt.swapisamplemvi.domain.repository.SwRepository
+import com.badoo.mvicore.android.AndroidTimeCapsule
 import com.badoo.mvicore.element.Actor
 import com.badoo.mvicore.element.Bootstrapper
 import com.badoo.mvicore.element.Reducer
 import com.badoo.mvicore.feature.ActorReducerFeature
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import java.util.concurrent.TimeUnit
+import java.io.Serializable
 
 class HeroesFeature(
-    swRepository: SwRepository
+    swRepository: SwRepository,
+    timeCapsule: AndroidTimeCapsule
 ): ActorReducerFeature<HeroesFeature.Wish, HeroesFeature.Effect, HeroesFeature.State, Nothing>(
-    initialState = State(
+    initialState = timeCapsule.state() ?: State(
         isLoading = false,
         heroes = emptyList()
     ),
@@ -21,10 +24,26 @@ class HeroesFeature(
     actor = ActorImpl(swRepository),
     bootstrapper = BootstrapperImpl()
 ) {
+
+    companion object {
+        private val CAPSULE_KEY = HeroesFeature::class.java.simpleName
+        private val STATE_KEY = "${HeroesFeature::class.java.simpleName}.state"
+
+        private fun AndroidTimeCapsule.state(): State? {
+            return get<Bundle>(CAPSULE_KEY)?.getSerializable(STATE_KEY) as? State
+        }
+
+        private fun State.toParcelable() = Bundle().apply { putSerializable(STATE_KEY, this@toParcelable) }
+    }
+
+    init {
+        timeCapsule.register(CAPSULE_KEY) { state.toParcelable() }
+    }
+
     data class State(
         val isLoading: Boolean,
         val heroes: List<Hero>
-    )
+    ): Serializable
 
     sealed class Wish {
         object LoadHeroes: Wish()

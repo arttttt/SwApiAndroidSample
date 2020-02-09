@@ -15,7 +15,7 @@ import io.reactivex.internal.disposables.DisposableContainer
 import kotlinx.android.extensions.LayoutContainer
 import org.koin.core.KoinComponent
 
-abstract class MviView<Event: UiEvent, VM: ViewModel> private constructor(
+abstract class ViewController<Event: UiEvent, VM: ViewModel> private constructor(
     protected val uiEvents: Relay<Event>,
     protected val states: Relay<VM>
 ):

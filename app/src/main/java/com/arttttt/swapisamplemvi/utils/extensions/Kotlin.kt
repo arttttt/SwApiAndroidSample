@@ -2,6 +2,18 @@
 
 package com.arttttt.swapisamplemvi.utils.extensions
 
+inline fun<T> T.isNotNull(): Boolean {
+    return this != null
+}
+
 inline fun<T> T.isNull(): Boolean {
     return this == null
+}
+
+inline fun<reified T>Any?.castTo(): T? {
+    return this as? T
+}
+
+inline fun<reified T>Any.unsafeCastTo(): T {
+    return this as T
 }
