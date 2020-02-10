@@ -3,6 +3,7 @@ package com.arttttt.swapisamplemvi.ui.base
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import com.jakewharton.rxrelay2.PublishRelay
 import com.jakewharton.rxrelay2.Relay
@@ -13,6 +14,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.internal.disposables.DisposableContainer
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.*
 import org.koin.core.KoinComponent
 
 abstract class ViewController<Event: UiEvent, VM: ViewModel> private constructor(
@@ -48,4 +50,9 @@ abstract class ViewController<Event: UiEvent, VM: ViewModel> private constructor
     }
 
     open fun onViewCreated() {}
+
+    @CallSuper
+    open fun onViewDestroyed() {
+        clearFindViewByIdCache()
+    }
 }

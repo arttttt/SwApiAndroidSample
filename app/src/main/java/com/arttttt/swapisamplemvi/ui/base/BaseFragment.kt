@@ -9,18 +9,25 @@ import com.badoo.mvicore.android.AndroidBindings
 import com.badoo.mvicore.android.AndroidTimeCapsule
 
 abstract class BaseFragment<MviViewController: ViewController<out UiEvent, out ViewModel>>: Fragment(), IBackHandler {
+
+    protected val timeCapsule = AndroidTimeCapsule(null)
+
     abstract val binder: AndroidBindings<MviViewController>
     abstract val viewController: MviViewController
-    protected lateinit var timeCapsule: AndroidTimeCapsule
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return viewController.createView(inflater, container).apply { timeCapsule = AndroidTimeCapsule(savedInstanceState) }
+        return viewController.createView(inflater, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binder.setup(viewController)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewController.onViewDestroyed()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
