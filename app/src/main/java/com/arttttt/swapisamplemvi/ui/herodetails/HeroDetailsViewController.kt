@@ -10,8 +10,6 @@ class HeroDetailsViewController: ViewController<HeroDetailsViewController.HeroDe
         object BackPressed: HeroDetailsUiEvent()
     }
 
-    override val layoutRes: Int = R.layout.fragment_hero_details
-
     override fun onBackPressed() {
         uiEvents.accept(HeroDetailsUiEvent.BackPressed)
     }

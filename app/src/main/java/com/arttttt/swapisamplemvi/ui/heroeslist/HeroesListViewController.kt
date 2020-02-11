@@ -26,8 +26,6 @@ class HeroesListViewController: ViewController<HeroesListViewController.HeroesLi
         object BackPressed: HeroesListUiEvent()
     }
 
-    override val layoutRes: Int = R.layout.fragment_list
-
     private val adapter: ListDifferAdapter by inject {
         parametersOf(
             setOf(
