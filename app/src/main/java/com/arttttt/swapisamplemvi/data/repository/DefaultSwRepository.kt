@@ -1,7 +1,7 @@
 package com.arttttt.swapisamplemvi.data.repository
 
-import com.arttttt.swapisamplemvi.data.database.model.HeroDbModel
 import com.arttttt.swapisamplemvi.data.database.dao.HeroesDao
+import com.arttttt.swapisamplemvi.data.database.model.HeroDbModel
 import com.arttttt.swapisamplemvi.data.network.api.SwApi
 import com.arttttt.swapisamplemvi.domain.entity.Hero
 import com.arttttt.swapisamplemvi.domain.repository.SwRepository

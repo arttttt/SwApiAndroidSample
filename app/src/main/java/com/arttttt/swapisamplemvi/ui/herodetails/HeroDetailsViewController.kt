@@ -1,6 +1,5 @@
 package com.arttttt.swapisamplemvi.ui.herodetails
 
-import com.arttttt.swapisamplemvi.R
 import com.arttttt.swapisamplemvi.ui.base.IBackHandler
 import com.arttttt.swapisamplemvi.ui.base.UiEvent
 import com.arttttt.swapisamplemvi.ui.base.ViewController

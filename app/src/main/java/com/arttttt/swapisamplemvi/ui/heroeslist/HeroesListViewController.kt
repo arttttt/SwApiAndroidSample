@@ -1,9 +1,8 @@
 package com.arttttt.swapisamplemvi.ui.heroeslist
 
-import com.arttttt.swapisamplemvi.R
 import com.arttttt.swapisamplemvi.ui.base.IBackHandler
-import com.arttttt.swapisamplemvi.ui.base.ViewController
 import com.arttttt.swapisamplemvi.ui.base.UiEvent
+import com.arttttt.swapisamplemvi.ui.base.ViewController
 import com.arttttt.swapisamplemvi.ui.base.recyclerview.DefaultDiffCallback
 import com.arttttt.swapisamplemvi.ui.base.recyclerview.ListDifferAdapter
 import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroAdapterDelegate
