@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import com.badoo.mvicore.android.AndroidBindings
 import com.badoo.mvicore.android.AndroidTimeCapsule
 
 abstract class BaseFragment<MviViewController: ViewController<out UiEvent, out ViewModel>>(
@@ -15,8 +16,14 @@ abstract class BaseFragment<MviViewController: ViewController<out UiEvent, out V
 
     protected val timeCapsule = AndroidTimeCapsule(null)
 
-    abstract val binder: AndroidPauseResumeBindings<MviViewController>
+    abstract val binder: AndroidBindings<MviViewController>
     abstract val viewController: MviViewController
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binder.setup(viewController)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(layoutRes, container, false)
@@ -26,7 +33,6 @@ abstract class BaseFragment<MviViewController: ViewController<out UiEvent, out V
         super.onViewCreated(view, savedInstanceState)
 
         viewController.attachView(view)
-        binder.setup(viewController)
     }
 
     override fun onDestroyView() {

@@ -3,15 +3,15 @@ package com.arttttt.swapisamplemvi.ui.heroeslist
 import androidx.lifecycle.LifecycleOwner
 import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature
 import com.arttttt.swapisamplemvi.ui.RootCoordinator
-import com.arttttt.swapisamplemvi.ui.base.AndroidPauseResumeBindings
 import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroAdapterItem
+import com.badoo.mvicore.android.AndroidBindings
 import com.badoo.mvicore.binder.using
 
 class HeroesListBinding(
     lifecycleOwner: LifecycleOwner,
     private val coordinator: RootCoordinator,
     private val heroesFeature: HeroesFeature
-): AndroidPauseResumeBindings<HeroesListViewController>(lifecycleOwner) {
+): AndroidBindings<HeroesListViewController>(lifecycleOwner) {
     override fun setup(view: HeroesListViewController) {
         binder.bind(heroesFeature to view using { state ->
             HeroesListViewModel(
