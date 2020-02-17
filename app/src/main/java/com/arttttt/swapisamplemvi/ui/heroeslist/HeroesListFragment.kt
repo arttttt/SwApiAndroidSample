@@ -4,24 +4,78 @@ import com.arttttt.swapisamplemvi.R
 import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature
 import com.arttttt.swapisamplemvi.ui.RootCoordinator
 import com.arttttt.swapisamplemvi.ui.base.BaseFragment
+import com.arttttt.swapisamplemvi.ui.base.UiAction
+import com.arttttt.swapisamplemvi.ui.base.recyclerview.DefaultDiffCallback
+import com.arttttt.swapisamplemvi.ui.base.recyclerview.ListDifferAdapter
+import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroAdapterDelegate
+import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroItemListener
+import com.arttttt.swapisamplemvi.utils.extensions.unsafeCastTo
 import com.badoo.mvicore.android.AndroidBindings
+import com.badoo.mvicore.byValue
+import com.badoo.mvicore.modelWatcher
+import com.jakewharton.rxbinding3.swiperefreshlayout.refreshes
+import io.reactivex.Observable
+import io.reactivex.functions.Consumer
+import kotlinx.android.synthetic.main.fragment_list.*
 import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 
-class HeroesListFragment: BaseFragment<HeroesListViewController>(R.layout.fragment_list) {
+class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, HeroesListViewModel>(R.layout.fragment_list) {
 
-    override val binder: AndroidBindings<HeroesListViewController> = HeroesListBinding(
+    sealed class HeroesListUiAction: UiAction {
+        object Refresh: HeroesListUiAction()
+        object HeroClicked: HeroesListUiAction()
+        object BackPressed: HeroesListUiAction()
+    }
+
+    override val binder: AndroidBindings<BaseFragment<HeroesListUiAction, HeroesListViewModel>> = HeroesListBinding(
         lifecycleOwner = this,
         coordinator = get(named<RootCoordinator>()),
         heroesFeature = HeroesFeature(
-            swRepository = get(),
-            timeCapsule = timeCapsule
+            swRepository = get()
         )
-    )
-    override val viewController: HeroesListViewController = HeroesListViewController()
+    ).unsafeCastTo()
 
+    private val adapter: ListDifferAdapter by inject {
+        parametersOf(
+            setOf(
+                HeroAdapterDelegate(
+                    object: HeroItemListener {
+                        override val clicks: Consumer<Unit> = Consumer {
+                            uiActions.accept(HeroesListUiAction.HeroClicked)
+                        }
+                    }
+                )
+            ),
+            get(named<DefaultDiffCallback>())
+        )
+    }
+
+    override fun onViewCreated() {
+        super.onViewCreated()
+
+        refreshLayout
+            .refreshes()
+            .map { HeroesListUiAction.Refresh }
+            .emitUiAction()
+
+        rvHeroes.adapter = adapter
+
+        val watcher = modelWatcher<HeroesListViewModel> {
+            watch(HeroesListViewModel::isLoading, byValue(), refreshLayout::setRefreshing)
+            watch(HeroesListViewModel::items, byValue(), adapter::setItems)
+        }
+
+        states
+            .subscribe(watcher::invoke)
+            .add()
+    }
 
     override fun onBackPressed() {
-        viewController.onBackPressed()
+        Observable
+            .just(HeroesListUiAction.BackPressed)
+            .emitUiAction()
     }
 }

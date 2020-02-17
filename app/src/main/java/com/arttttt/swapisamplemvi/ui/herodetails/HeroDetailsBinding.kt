@@ -8,11 +8,11 @@ import com.badoo.mvicore.binder.using
 class HeroDetailsBinding(
     lifecycleOwner: LifecycleOwner,
     private val rootCoordinator: RootCoordinator
-): AndroidBindings<HeroDetailsViewController>(lifecycleOwner) {
-    override fun setup(view: HeroDetailsViewController) {
+): AndroidBindings<HeroDetailsFragment>(lifecycleOwner) {
+    override fun setup(view: HeroDetailsFragment) {
         binder.bind(view to rootCoordinator using { event ->
             when (event) {
-                HeroDetailsViewController.HeroDetailsUiEvent.BackPressed -> RootCoordinator.RootNavigationEvent.BackPressed
+                HeroDetailsFragment.HeroDetailsUiAction.BackPressed -> RootCoordinator.RootNavigationEvent.BackPressed
             }
         })
     }

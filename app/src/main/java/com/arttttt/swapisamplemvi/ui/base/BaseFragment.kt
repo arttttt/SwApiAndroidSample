@@ -4,44 +4,73 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import com.arttttt.swapisamplemvi.utils.extensions.unsafeCastTo
 import com.badoo.mvicore.android.AndroidBindings
-import com.badoo.mvicore.android.AndroidTimeCapsule
+import com.jakewharton.rxrelay2.PublishRelay
+import com.jakewharton.rxrelay2.Relay
+import io.reactivex.Observable
+import io.reactivex.ObservableSource
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Consumer
 
-abstract class BaseFragment<MviViewController: ViewController<out UiEvent, out ViewModel>>(
-    @LayoutRes
-    private val layoutRes: Int
-): Fragment(), IBackHandler {
+abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
+    private val compositeDisposable: CompositeDisposable,
+    protected val uiActions: Relay<A>,
+    protected val states: Relay<S>
+) : Fragment(),
+    IBackHandler,
+    ObservableSource<A> by uiActions,
+    Consumer<S> by states
+{
 
-    protected val timeCapsule = AndroidTimeCapsule(null)
+    private var layoutRes: Int = 0
 
-    abstract val binder: AndroidBindings<MviViewController>
-    abstract val viewController: MviViewController
+    constructor(@LayoutRes layoutRes: Int): this(CompositeDisposable(), PublishRelay.create(), PublishRelay.create()) {
+        this.layoutRes = layoutRes
+    }
+
+    protected abstract val binder: AndroidBindings<BaseFragment<A, S>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binder.setup(viewController)
+        binder.setup(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(layoutRes, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    final override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewController.attachView(view)
+        onViewPreCreated()
+        onViewCreated()
     }
 
+    @CallSuper
     override fun onDestroyView() {
         super.onDestroyView()
-        viewController.detachView()
+        compositeDisposable.clear()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        timeCapsule.saveState(outState)
+    @CallSuper
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.dispose()
     }
+
+    protected fun Observable<out A>.emitUiAction() {
+        subscribe(uiActions).add()
+    }
+
+    protected fun Disposable.add() {
+        compositeDisposable.add(this)
+    }
+
+    open fun onViewPreCreated() {}
+    open fun onViewCreated() {}
 }

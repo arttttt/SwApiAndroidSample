@@ -11,8 +11,8 @@ class HeroesListBinding(
     lifecycleOwner: LifecycleOwner,
     private val coordinator: RootCoordinator,
     private val heroesFeature: HeroesFeature
-): AndroidBindings<HeroesListViewController>(lifecycleOwner) {
-    override fun setup(view: HeroesListViewController) {
+): AndroidBindings<HeroesListFragment>(lifecycleOwner) {
+    override fun setup(view: HeroesListFragment) {
         binder.bind(heroesFeature to view using { state ->
             HeroesListViewModel(
                 isLoading = state.isLoading,
@@ -21,15 +21,15 @@ class HeroesListBinding(
         })
         binder.bind(view to heroesFeature using { event ->
             when (event) {
-                is HeroesListViewController.HeroesListUiEvent.Refresh -> HeroesFeature.Wish.RefreshHeroes
-                is HeroesListViewController.HeroesListUiEvent.HeroClicked -> null
-                is HeroesListViewController.HeroesListUiEvent.BackPressed -> null
+                is HeroesListFragment.HeroesListUiAction.Refresh -> HeroesFeature.Wish.RefreshHeroes
+                is HeroesListFragment.HeroesListUiAction.HeroClicked -> null
+                is HeroesListFragment.HeroesListUiAction.BackPressed -> null
             }
         })
         binder.bind(view to coordinator using { event ->
             when (event) {
-                is HeroesListViewController.HeroesListUiEvent.BackPressed -> RootCoordinator.RootNavigationEvent.BackPressed
-                is HeroesListViewController.HeroesListUiEvent.HeroClicked -> RootCoordinator.RootNavigationEvent.OpenHeroDetails
+                is HeroesListFragment.HeroesListUiAction.BackPressed -> RootCoordinator.RootNavigationEvent.BackPressed
+                is HeroesListFragment.HeroesListUiAction.HeroClicked -> RootCoordinator.RootNavigationEvent.OpenHeroDetails
                 else -> null
             }
         })
