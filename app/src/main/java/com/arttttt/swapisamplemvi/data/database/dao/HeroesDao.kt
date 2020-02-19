@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.arttttt.swapisamplemvi.data.database.model.HeroDbModel
 import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.Observable
 
 @Dao
 interface HeroesDao {
@@ -17,5 +17,5 @@ interface HeroesDao {
     fun clearHeroes(): Completable
 
     @Query("select * from heroes_table")
-    fun getAllHeroes(): Single<List<HeroDbModel>>
+    fun getAllHeroes(): Observable<List<HeroDbModel>>
 }

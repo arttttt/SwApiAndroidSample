@@ -43,9 +43,8 @@ class DefaultSwRepository(
                     }.toTypedArray())
                     .toSingleDefault(Unit)
             }
-            .flatMap { heroesDao.getAllHeroes() }
-            .toObservable()
-            .startWith(heroesDao.getAllHeroes().toObservable().filter(List<HeroDbModel>::isNotEmpty))
+            .flatMapObservable { heroesDao.getAllHeroes() }
+            .startWith(heroesDao.getAllHeroes().take(1).filter(List<HeroDbModel>::isNotEmpty))
             .map { heroes -> heroes.map { hero -> Hero(hero.name) } }
             .subscribeOn(Schedulers.io())
     }
