@@ -7,6 +7,7 @@ import com.arttttt.swapisamplemvi.domain.entity.Hero
 import com.arttttt.swapisamplemvi.domain.repository.SwRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 
 class DefaultSwRepository(
@@ -45,7 +46,14 @@ class DefaultSwRepository(
             }
             .flatMapObservable { heroesDao.getAllHeroes() }
             .startWith(heroesDao.getAllHeroes().take(1).filter(List<HeroDbModel>::isNotEmpty))
-            .map { heroes -> heroes.map { hero -> Hero(hero.name) } }
+            .map { heroes -> heroes.map { hero -> Hero(hero.name, hero.birthYear) } }
+            .subscribeOn(Schedulers.io())
+    }
+
+    override fun getHeroByName(name: String): Single<Hero> {
+        return heroesDao
+            .getHeroByName(name)
+            .map { hero -> Hero(hero.name, hero.birthYear) }
             .subscribeOn(Schedulers.io())
     }
 }

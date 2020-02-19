@@ -22,15 +22,19 @@ class HeroesListBinding(
         binder.bind(view to heroesFeature using { event ->
             when (event) {
                 is HeroesListFragment.HeroesListUiAction.Refresh -> HeroesFeature.Wish.RefreshHeroes
-                is HeroesListFragment.HeroesListUiAction.HeroClicked -> null
+                is HeroesListFragment.HeroesListUiAction.HeroClicked -> HeroesFeature.Wish.OpenHeroDetails(event.position)
                 is HeroesListFragment.HeroesListUiAction.BackPressed -> null
             }
         })
         binder.bind(view to coordinator using { event ->
             when (event) {
                 is HeroesListFragment.HeroesListUiAction.BackPressed -> RootCoordinator.RootNavigationEvent.BackPressed
-                is HeroesListFragment.HeroesListUiAction.HeroClicked -> RootCoordinator.RootNavigationEvent.OpenHeroDetails
                 else -> null
+            }
+        })
+        binder.bind(heroesFeature.news to coordinator using { news ->
+            when (news) {
+                is HeroesFeature.News.HeroSelected -> RootCoordinator.RootNavigationEvent.OpenHeroDetails(news.name)
             }
         })
     }

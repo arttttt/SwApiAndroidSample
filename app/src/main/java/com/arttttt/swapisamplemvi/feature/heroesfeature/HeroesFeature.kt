@@ -4,6 +4,7 @@ import com.arttttt.swapisamplemvi.domain.entity.Hero
 import com.arttttt.swapisamplemvi.domain.repository.SwRepository
 import com.badoo.mvicore.element.Actor
 import com.badoo.mvicore.element.Bootstrapper
+import com.badoo.mvicore.element.NewsPublisher
 import com.badoo.mvicore.element.Reducer
 import com.badoo.mvicore.feature.ActorReducerFeature
 import io.reactivex.Observable
@@ -12,14 +13,15 @@ import java.io.Serializable
 
 class HeroesFeature(
     swRepository: SwRepository
-): ActorReducerFeature<HeroesFeature.Wish, HeroesFeature.Effect, HeroesFeature.State, Nothing>(
+): ActorReducerFeature<HeroesFeature.Wish, HeroesFeature.Effect, HeroesFeature.State, HeroesFeature.News>(
     initialState = State(
         isLoading = false,
         heroes = emptyList()
     ),
     reducer = ReducerImpl(),
     actor = ActorImpl(swRepository),
-    bootstrapper = BootstrapperImpl()
+    bootstrapper = BootstrapperImpl(),
+    newsPublisher = NewsPublisherImpl()
 ) {
 
     data class State(
@@ -30,11 +32,17 @@ class HeroesFeature(
     sealed class Wish {
         object LoadHeroes: Wish()
         object RefreshHeroes: Wish()
+        class OpenHeroDetails(val index: Int): Wish()
     }
 
     sealed class Effect {
+        object NoEffect: Effect()
         object Loading: Effect()
         class HeroesLoaded(val heroes: List<Hero>): Effect()
+    }
+
+    sealed class News {
+        class HeroSelected(val name: String): News()
     }
 
     class BootstrapperImpl: Bootstrapper<Wish> {
@@ -58,6 +66,7 @@ class HeroesFeature(
                         heroes = effect.heroes
                     )
                 }
+                is Effect.NoEffect -> state
             }
         }
     }
@@ -67,21 +76,30 @@ class HeroesFeature(
     ): Actor<State, Wish, Effect> {
         override fun invoke(state: State, wish: Wish): Observable<out Effect> {
             return when (wish) {
-                Wish.LoadHeroes -> {
+                is Wish.LoadHeroes -> {
                     swRepository
                         .getHeroes()
                         .map<Effect>(Effect::HeroesLoaded)
                         .startWith(Observable.just(Effect.Loading))
-                        .observeOn(AndroidSchedulers.mainThread())
                 }
-                Wish.RefreshHeroes -> {
+                is Wish.RefreshHeroes -> {
                     swRepository
                         .deleteAllHeroes()
                         .andThen(swRepository.getHeroes())
                         .map<Effect>(Effect::HeroesLoaded)
                         .startWith(Observable.just(Effect.Loading))
-                        .observeOn(AndroidSchedulers.mainThread())
                 }
+                is Wish.OpenHeroDetails -> Observable.just(Effect.NoEffect)
+            }.observeOn(AndroidSchedulers.mainThread())
+        }
+    }
+
+
+    class NewsPublisherImpl: NewsPublisher<Wish, Effect, State, News> {
+        override fun invoke(action: Wish, effect: Effect, state: State): News? {
+            return when (action) {
+                is Wish.OpenHeroDetails -> News.HeroSelected(state.heroes.elementAt(action.index).name)
+                else -> null
             }
         }
     }

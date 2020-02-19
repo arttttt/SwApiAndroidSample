@@ -11,7 +11,7 @@ fun HeroAdapterDelegate(
     listener: HeroItemListener
 ) = adapterDelegateLayoutContainer<HeroAdapterItem, IListItem>(R.layout.item_hero) {
 
-    container.clicks().subscribe(listener.clicks)
+    container.clicks().map { adapterPosition }.subscribe(listener.clicks)
 
     bind {
         tvHeroName.text = item.name
@@ -19,5 +19,5 @@ fun HeroAdapterDelegate(
 }
 
 interface HeroItemListener {
-    val clicks: Consumer<Unit>
+    val clicks: Consumer<Int>
 }

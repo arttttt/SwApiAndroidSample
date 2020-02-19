@@ -26,8 +26,8 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, He
 
     sealed class HeroesListUiAction: UiAction {
         object Refresh: HeroesListUiAction()
-        object HeroClicked: HeroesListUiAction()
         object BackPressed: HeroesListUiAction()
+        class HeroClicked(val position: Int): HeroesListUiAction()
     }
 
     override val binder: AndroidBindings<BaseFragment<HeroesListUiAction, HeroesListViewModel>> = HeroesListBinding(
@@ -43,8 +43,8 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, He
             setOf(
                 HeroAdapterDelegate(
                     object: HeroItemListener {
-                        override val clicks: Consumer<Unit> = Consumer {
-                            uiActions.accept(HeroesListUiAction.HeroClicked)
+                        override val clicks: Consumer<Int> = Consumer { position ->
+                            uiActions.accept(HeroesListUiAction.HeroClicked(position))
                         }
                     }
                 )

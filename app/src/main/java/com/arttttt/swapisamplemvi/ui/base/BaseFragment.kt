@@ -73,4 +73,8 @@ abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
 
     open fun onViewPreCreated() {}
     open fun onViewCreated() {}
+
+    protected fun<T> Fragment.argument(key: String, defValue: T? = null): T {
+        return return (arguments?.get(key) ?: defValue) as T
+    }
 }

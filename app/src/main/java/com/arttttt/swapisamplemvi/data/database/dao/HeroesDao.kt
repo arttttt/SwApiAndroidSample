@@ -7,6 +7,7 @@ import androidx.room.Query
 import com.arttttt.swapisamplemvi.data.database.model.HeroDbModel
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
 
 @Dao
 interface HeroesDao {
@@ -18,4 +19,7 @@ interface HeroesDao {
 
     @Query("select * from heroes_table")
     fun getAllHeroes(): Observable<List<HeroDbModel>>
+
+    @Query("select * from heroes_table where name = :name")
+    fun getHeroByName(name: String): Single<HeroDbModel>
 }
