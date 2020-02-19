@@ -21,7 +21,6 @@ class HeroDetailsBinding(
 
         binder.bind(view to heroFeature using { event ->
             when (event) {
-                is HeroDetailsFragment.HeroDetailsUiAction.FragmentCreated -> HeroFeature.Wish.LoadHeroInfo(event.name)
                 is HeroDetailsFragment.HeroDetailsUiAction.BackPressed -> null
             }
         })
@@ -29,7 +28,6 @@ class HeroDetailsBinding(
         binder.bind(view to rootCoordinator using { event ->
             when (event) {
                 is HeroDetailsFragment.HeroDetailsUiAction.BackPressed -> RootCoordinator.RootNavigationEvent.BackPressed
-                is HeroDetailsFragment.HeroDetailsUiAction.FragmentCreated -> null
             }
         })
     }

@@ -32,24 +32,22 @@ class HeroDetailsFragment: BaseFragment<HeroDetailsFragment.HeroDetailsUiAction,
     }
 
     sealed class HeroDetailsUiAction: UiAction {
-        class FragmentCreated(val name: String): HeroDetailsUiAction()
         object BackPressed: HeroDetailsUiAction()
     }
 
-    override val binder: AndroidBindings<BaseFragment<HeroDetailsUiAction, HeroDetailsViewModel>> = HeroDetailsBinding(
-        lifecycleOwner = this,
-        rootCoordinator = get(named<RootCoordinator>()),
-        heroFeature = HeroFeature(
-            swRepository = get()
-        )
-    ).unsafeCastTo()
+    override val binder: AndroidBindings<BaseFragment<HeroDetailsUiAction, HeroDetailsViewModel>> by lazy {
+        HeroDetailsBinding(
+            lifecycleOwner = this,
+            rootCoordinator = get(named<RootCoordinator>()),
+            heroFeature = HeroFeature(
+                swRepository = get(),
+                heroName = argument(HERO_NAME)
+            )
+        ).unsafeCastTo<AndroidBindings<BaseFragment<HeroDetailsUiAction, HeroDetailsViewModel>>>()
+    }
 
     override fun onViewCreated() {
         super.onViewCreated()
-
-        Observable
-            .just(HeroDetailsUiAction.FragmentCreated(argument(HERO_NAME)))
-            .emitUiAction()
 
         val watcher = modelWatcher<HeroDetailsViewModel> {
             (HeroDetailsViewModel::name or HeroDetailsViewModel::birthDate) { viewModel ->

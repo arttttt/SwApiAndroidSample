@@ -6,15 +6,20 @@ import com.arttttt.swapisamplemvi.feature.herofeature.HeroFeature.*
 import com.arttttt.swapisamplemvi.feature.herofeature.HeroFeature.Effect.HeroInfoLoaded
 import com.arttttt.swapisamplemvi.feature.herofeature.HeroFeature.Wish.LoadHeroInfo
 import com.badoo.mvicore.element.Actor
+import com.badoo.mvicore.element.Bootstrapper
 import com.badoo.mvicore.element.Reducer
 import com.badoo.mvicore.feature.ActorReducerFeature
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 
-class HeroFeature(swRepository: SwRepository) : ActorReducerFeature<Wish, Effect, State, Nothing>(
+class HeroFeature(
+    swRepository: SwRepository,
+    heroName: String
+) : ActorReducerFeature<Wish, Effect, State, Nothing>(
     initialState = State(),
     actor = ActorImpl(swRepository),
-    reducer = ReducerImpl()
+    reducer = ReducerImpl(),
+    bootstrapper = BootStrapperImpl(heroName)
 ) {
 
     data class State(
@@ -27,6 +32,12 @@ class HeroFeature(swRepository: SwRepository) : ActorReducerFeature<Wish, Effect
 
     sealed class Effect {
         class HeroInfoLoaded(val hero: Hero): Effect()
+    }
+
+    class BootStrapperImpl(private val heroName: String): Bootstrapper<Wish> {
+        override fun invoke(): Observable<Wish> {
+            return Observable.just(LoadHeroInfo(heroName))
+        }
     }
 
     class ActorImpl(
