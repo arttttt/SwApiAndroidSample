@@ -4,9 +4,8 @@ import com.arttttt.swapisamplemvi.Screens
 import com.arttttt.swapisamplemvi.ui.base.navigation.Coordinator
 import com.arttttt.swapisamplemvi.ui.base.navigation.NavigationEvent
 import ru.terrakok.cicerone.Router
-import javax.inject.Inject
 
-class RootCoordinator @Inject constructor(
+class RootCoordinator(
     private val router: Router
 ): Coordinator<RootCoordinator.RootNavigationEvent> {
     sealed class RootNavigationEvent: NavigationEvent {
