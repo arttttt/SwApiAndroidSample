@@ -1,25 +1,26 @@
 package com.arttttt.swapisamplemvi
 
 import android.app.Application
-import com.arttttt.swapisamplemvi.di.appModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
+import com.arttttt.swapisamplemvi.di.DaggerAppComponent
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
 import timber.log.Timber
+import javax.inject.Inject
 
-class App: Application() {
+class App: Application(), HasAndroidInjector {
 
-    override fun onCreate() {
-        super.onCreate()
+    @Inject
+    lateinit var injector: DispatchingAndroidInjector<Any>
 
-        initKoin()
-        initTimber()
+    override fun androidInjector(): AndroidInjector<Any> {
+        return injector
     }
 
-    private fun initKoin() {
-        startKoin {
-            androidContext(this@App)
-            modules(appModule)
-        }
+    override fun onCreate() {
+        DaggerAppComponent.factory().create(this).inject(this)
+        super.onCreate()
+        initTimber()
     }
 
     private fun initTimber() {

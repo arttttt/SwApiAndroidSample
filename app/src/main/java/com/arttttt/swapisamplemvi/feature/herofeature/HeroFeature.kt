@@ -11,10 +11,11 @@ import com.badoo.mvicore.element.Reducer
 import com.badoo.mvicore.feature.ActorReducerFeature
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import javax.inject.Inject
 
-class HeroFeature(
-    swRepository: SwRepository,
-    heroName: String
+class HeroFeature @Inject constructor(
+    heroName: String,
+    swRepository: SwRepository
 ) : ActorReducerFeature<Wish, Effect, State, Nothing>(
     initialState = State(),
     actor = ActorImpl(swRepository),

@@ -8,18 +8,34 @@ import com.arttttt.swapisamplemvi.Screens
 import com.arttttt.swapisamplemvi.ui.base.IBackHandler
 import com.arttttt.swapisamplemvi.utils.extensions.castTo
 import com.arttttt.swapisamplemvi.utils.extensions.isNull
-import org.koin.android.ext.android.inject
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
+import javax.inject.Inject
 
-class AppActivity: AppCompatActivity() {
+class AppActivity: AppCompatActivity(), HasAndroidInjector {
+
+    @Inject
+    protected lateinit var injector: DispatchingAndroidInjector<Any>
+
+    override fun androidInjector(): AndroidInjector<Any> {
+        return injector
+    }
 
     private val navigator = SupportAppNavigator(this, R.id.rootContainer)
-    private val navHolder: NavigatorHolder by inject()
-    private val router: Router by inject()
+
+    @Inject
+    protected lateinit var navHolder: NavigatorHolder
+
+    @Inject
+    protected lateinit var router: Router
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.app_activity)
 

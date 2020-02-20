@@ -10,8 +10,9 @@ import com.badoo.mvicore.feature.ActorReducerFeature
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.io.Serializable
+import javax.inject.Inject
 
-class HeroesFeature(
+class HeroesFeature @Inject constructor(
     swRepository: SwRepository
 ): ActorReducerFeature<HeroesFeature.Wish, HeroesFeature.Effect, HeroesFeature.State, HeroesFeature.News>(
     initialState = State(

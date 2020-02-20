@@ -1,5 +1,6 @@
 package com.arttttt.swapisamplemvi.ui.base
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,10 +8,10 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import com.arttttt.swapisamplemvi.utils.extensions.unsafeCastTo
 import com.badoo.mvicore.android.AndroidBindings
 import com.jakewharton.rxrelay2.PublishRelay
 import com.jakewharton.rxrelay2.Relay
+import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.disposables.CompositeDisposable
@@ -34,6 +35,11 @@ abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
     }
 
     protected abstract val binder: AndroidBindings<BaseFragment<A, S>>
+
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
