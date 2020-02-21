@@ -3,12 +3,11 @@ package com.arttttt.swapisamplemvi.ui.heroeslist
 import android.view.View
 import androidx.core.app.SharedElementCallback
 import com.arttttt.swapisamplemvi.R
+import com.arttttt.swapisamplemvi.di.factories.ListDifferAdapterFactory
 import com.arttttt.swapisamplemvi.ui.base.BaseFragment
 import com.arttttt.swapisamplemvi.ui.base.SharedElementProvider
 import com.arttttt.swapisamplemvi.ui.base.UiAction
-import com.arttttt.swapisamplemvi.ui.base.recyclerview.DefaultDiffCallback
 import com.arttttt.swapisamplemvi.ui.base.recyclerview.ListDifferAdapter
-import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroAdapterDelegate
 import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroItemListener
 import com.badoo.mvicore.android.AndroidBindings
 import com.badoo.mvicore.byValue
@@ -20,7 +19,9 @@ import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.item_hero.view.*
 import javax.inject.Inject
 
-class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, HeroesListViewModel>(R.layout.fragment_list), SharedElementProvider {
+class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, HeroesListViewModel>(R.layout.fragment_list),
+    SharedElementProvider,
+    HeroItemListener {
 
     sealed class HeroesListUiAction: UiAction {
         object Refresh: HeroesListUiAction()
@@ -30,21 +31,18 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, He
 
     @Inject
     override lateinit var binder: AndroidBindings<BaseFragment<HeroesListUiAction, HeroesListViewModel>>
+
+    @Inject
+    protected lateinit var adapterFactory: ListDifferAdapterFactory
+
+    private val adapter: ListDifferAdapter by lazy { adapterFactory.create() }
+
     private var clickedPosition = 0
 
-    private val adapter = ListDifferAdapter(
-        DefaultDiffCallback(),
-        setOf(
-            HeroAdapterDelegate(
-                object: HeroItemListener {
-                    override val clicks: Consumer<Int> = Consumer { position ->
-                        clickedPosition = position
-                        uiActions.accept(HeroesListUiAction.HeroClicked(position))
-                    }
-                }
-            )
-        )
-    )
+    override val clicks: Consumer<Int> = Consumer { position ->
+        clickedPosition = position
+        uiActions.accept(HeroesListUiAction.HeroClicked(position))
+    }
 
     override fun onViewCreated() {
         super.onViewCreated()
