@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
+import androidx.transition.*
 import com.badoo.mvicore.android.AndroidBindings
 import com.jakewharton.rxrelay2.PublishRelay
 import com.jakewharton.rxrelay2.Relay
@@ -35,12 +37,23 @@ abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
     }
 
     protected abstract val binder: AndroidBindings<BaseFragment<A, S>>
+    protected open val sharedElementTransition: Transition? = TransitionSet().apply {
+        addTransition(ChangeBounds())
+        addTransition(ChangeClipBounds())
+        addTransition(ChangeTransform())
+    }
 
+    @CallSuper
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
+        sharedElementTransition?.let { transition ->
+            sharedElementEnterTransition = transition
+            sharedElementReturnTransition = transition
+        }
         super.onAttach(context)
     }
 
+    @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,6 +67,12 @@ abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
     final override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onViewPreCreated()
+
+        postponeEnterTransition()
+        requireView().doOnPreDraw {
+            startPostponedEnterTransition()
+        }
+
         onViewCreated()
     }
 

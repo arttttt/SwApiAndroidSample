@@ -15,6 +15,7 @@ fun HeroAdapterDelegate(
 
     bind {
         tvHeroName.text = item.name
+        tvHeroName.transitionName = item.name
     }
 }
 
