@@ -37,11 +37,7 @@ abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
     }
 
     protected abstract val binder: AndroidBindings<BaseFragment<A, S>>
-    protected open val sharedElementTransition: Transition? = TransitionSet().apply {
-        addTransition(ChangeBounds())
-        addTransition(ChangeClipBounds())
-        addTransition(ChangeTransform())
-    }
+    protected open val sharedElementTransition: Transition? = ChangeTransform()
 
     @CallSuper
     override fun onAttach(context: Context) {

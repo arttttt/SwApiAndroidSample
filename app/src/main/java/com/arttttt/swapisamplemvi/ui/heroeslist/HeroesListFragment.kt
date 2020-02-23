@@ -1,5 +1,6 @@
 package com.arttttt.swapisamplemvi.ui.heroeslist
 
+import android.content.Context
 import android.view.View
 import androidx.core.app.SharedElementCallback
 import com.arttttt.swapisamplemvi.R
@@ -26,6 +27,7 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, He
     sealed class HeroesListUiAction: UiAction {
         object Refresh: HeroesListUiAction()
         object BackPressed: HeroesListUiAction()
+        object LoadMoreHeroes: HeroesListUiAction()
         class HeroClicked(val position: Int): HeroesListUiAction()
     }
 
@@ -44,8 +46,8 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, He
         uiActions.accept(HeroesListUiAction.HeroClicked(position))
     }
 
-    override fun onViewCreated() {
-        super.onViewCreated()
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
 
         setExitSharedElementCallback(object: SharedElementCallback() {
             override fun onMapSharedElements(
@@ -57,6 +59,15 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, He
                 sharedElements[names.first()] = holder.itemView.tvHeroName
             }
         })
+    }
+
+    override fun onViewCreated() {
+        super.onViewCreated()
+
+        adapter
+            .loadMoreObservable
+            .map { HeroesListUiAction.LoadMoreHeroes }
+            .emitUiAction()
 
         refreshLayout
             .refreshes()

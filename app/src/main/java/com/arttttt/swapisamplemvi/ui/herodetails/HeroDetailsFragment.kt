@@ -1,5 +1,6 @@
 package com.arttttt.swapisamplemvi.ui.herodetails
 
+import android.content.Context
 import android.view.View
 import androidx.core.app.SharedElementCallback
 import androidx.core.os.bundleOf
@@ -34,10 +35,8 @@ class HeroDetailsFragment: BaseFragment<HeroDetailsFragment.HeroDetailsUiAction,
     @Inject
     override lateinit var binder: AndroidBindings<BaseFragment<HeroDetailsUiAction, HeroDetailsViewModel>>
 
-    override fun onViewCreated() {
-        super.onViewCreated()
-
-        tvHeroName.transitionName = argument(HERO_NAME)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
 
         setEnterSharedElementCallback(object: SharedElementCallback() {
             override fun onMapSharedElements(
@@ -47,6 +46,12 @@ class HeroDetailsFragment: BaseFragment<HeroDetailsFragment.HeroDetailsUiAction,
                 sharedElements[names.first()] = tvHeroName
             }
         })
+    }
+
+    override fun onViewCreated() {
+        super.onViewCreated()
+
+        tvHeroName.transitionName = argument(HERO_NAME)
 
         val watcher = modelWatcher<HeroDetailsViewModel> {
             (HeroDetailsViewModel::name or HeroDetailsViewModel::birthDate) { viewModel ->

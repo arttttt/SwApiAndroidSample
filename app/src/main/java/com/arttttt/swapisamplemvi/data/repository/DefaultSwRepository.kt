@@ -22,10 +22,13 @@ class DefaultSwRepository @Inject constructor(
             .subscribeOn(Schedulers.io())
     }
 
-    override fun getHeroes(): Observable<List<Hero>> {
+    override fun getHeroesPage(pageIndex: Int): Observable<List<Hero>> {
         return swApi
-            .searchHero()
-            .flatMap { response ->
+            .searchHero(pageIndex)
+            .map { it.results.map { Hero(it.name, it.birthYear) } }
+            .toObservable()
+            .subscribeOn(Schedulers.io())
+            /*.flatMap { response ->
                 heroesDao
                     .insertHeroes(*response.results.map { hero ->
                         HeroDbModel(
@@ -48,7 +51,7 @@ class DefaultSwRepository @Inject constructor(
             .flatMapObservable { heroesDao.getAllHeroes() }
             .startWith(heroesDao.getAllHeroes().take(1).filter(List<HeroDbModel>::isNotEmpty))
             .map { heroes -> heroes.map { hero -> Hero(hero.name, hero.birthYear) } }
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(Schedulers.io())*/
     }
 
     override fun getHeroByName(name: String): Single<Hero> {

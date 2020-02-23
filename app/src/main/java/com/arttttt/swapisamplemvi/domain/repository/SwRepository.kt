@@ -7,6 +7,6 @@ import io.reactivex.Single
 
 interface SwRepository {
     fun deleteAllHeroes(): Completable
-    fun getHeroes(): Observable<List<Hero>>
+    fun getHeroesPage(pageIndex: Int): Observable<List<Hero>>
     fun getHeroByName(name: String): Single<Hero>
 }
