@@ -2,6 +2,7 @@ package com.arttttt.swapisamplemvi.di.modules
 
 import com.arttttt.swapisamplemvi.di.PerActivity
 import com.arttttt.swapisamplemvi.di.PerFragment
+import com.arttttt.swapisamplemvi.feature.herofeature.HeroFeature
 import com.arttttt.swapisamplemvi.ui.RootCoordinator
 import com.arttttt.swapisamplemvi.ui.herodetails.HeroDetailsFragment
 import com.arttttt.swapisamplemvi.ui.herodetails.di.HeroDetailsModule
@@ -47,6 +48,13 @@ abstract class UiModule {
         fun provideCoordinator(router: Router): RootCoordinator{
             return RootCoordinator(router)
         }
+
+        @JvmStatic
+        @PerActivity
+        @Provides
+        fun provideHeroFeature(): HeroFeature {
+            return HeroFeature()
+        }
     }
 
     @PerFragment
@@ -55,5 +63,5 @@ abstract class UiModule {
 
     @PerFragment
     @ContributesAndroidInjector(modules = [HeroDetailsModule::class])
-    abstract fun provideHeroeDetailsFragment(): HeroDetailsFragment
+    abstract fun provideHeroDetailsFragment(): HeroDetailsFragment
 }

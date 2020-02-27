@@ -12,11 +12,9 @@ object Screens {
         }
     }
 
-    class HeroDetailsScreen(
-        private val name: String
-    ): SupportAppScreen() {
+    object HeroDetailsScreen: SupportAppScreen() {
         override fun getFragment(): Fragment {
-            return HeroDetailsFragment.newInstance(name)
+            return HeroDetailsFragment.newInstance()
         }
     }
 }

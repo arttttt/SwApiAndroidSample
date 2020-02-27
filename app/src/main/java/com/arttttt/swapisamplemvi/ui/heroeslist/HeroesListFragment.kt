@@ -3,14 +3,15 @@ package com.arttttt.swapisamplemvi.ui.heroeslist
 import android.content.Context
 import android.view.View
 import androidx.core.app.SharedElementCallback
+import androidx.core.view.doOnPreDraw
 import com.arttttt.swapisamplemvi.R
 import com.arttttt.swapisamplemvi.di.factories.ListDifferAdapterFactory
+import com.arttttt.swapisamplemvi.ui.base.BaseBindings
 import com.arttttt.swapisamplemvi.ui.base.BaseFragment
 import com.arttttt.swapisamplemvi.ui.base.SharedElementProvider
 import com.arttttt.swapisamplemvi.ui.base.UiAction
 import com.arttttt.swapisamplemvi.ui.base.recyclerview.ListDifferAdapter
 import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroItemListener
-import com.badoo.mvicore.android.AndroidBindings
 import com.badoo.mvicore.byValue
 import com.badoo.mvicore.modelWatcher
 import com.jakewharton.rxbinding3.swiperefreshlayout.refreshes
@@ -32,7 +33,14 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, He
     }
 
     @Inject
-    override lateinit var binder: AndroidBindings<BaseFragment<HeroesListUiAction, HeroesListViewModel>>
+    override lateinit var binder: BaseBindings<BaseFragment<HeroesListUiAction, HeroesListViewModel>>
+
+    override val watcher by lazy {
+        modelWatcher<HeroesListViewModel> {
+            watch(HeroesListViewModel::isLoading, byValue(), refreshLayout::setRefreshing)
+            watch(HeroesListViewModel::items, byValue(), adapter::setItems)
+        }
+    }
 
     @Inject
     protected lateinit var adapterFactory: ListDifferAdapterFactory
@@ -61,6 +69,15 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, He
         })
     }
 
+    override fun onViewPreCreated() {
+        super.onViewPreCreated()
+
+        postponeEnterTransition()
+        requireView().doOnPreDraw {
+            startPostponedEnterTransition()
+        }
+    }
+
     override fun onViewCreated() {
         super.onViewCreated()
 
@@ -75,15 +92,6 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, He
             .emitUiAction()
 
         rvHeroes.adapter = adapter
-
-        val watcher = modelWatcher<HeroesListViewModel> {
-            watch(HeroesListViewModel::isLoading, byValue(), refreshLayout::setRefreshing)
-            watch(HeroesListViewModel::items, byValue(), adapter::setItems)
-        }
-
-        states
-            .subscribe(watcher::invoke)
-            .add()
     }
 
     override fun onBackPressed() {

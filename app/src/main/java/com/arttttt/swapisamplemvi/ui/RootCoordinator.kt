@@ -10,13 +10,13 @@ class RootCoordinator(
 ): Coordinator<RootCoordinator.RootNavigationEvent> {
     sealed class RootNavigationEvent: NavigationEvent {
         object BackPressed: RootNavigationEvent()
-        class OpenHeroDetails(val heroName: String): RootNavigationEvent()
+        object OpenHeroDetails: RootNavigationEvent()
     }
 
     override fun accept(event: RootNavigationEvent?) {
         return when (event) {
             is RootNavigationEvent.BackPressed -> router.exit()
-            is RootNavigationEvent.OpenHeroDetails -> router.navigateTo(Screens.HeroDetailsScreen(event.heroName))
+            is RootNavigationEvent.OpenHeroDetails -> router.navigateTo(Screens.HeroDetailsScreen)
             else -> Unit
         }
     }

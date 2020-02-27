@@ -1,16 +1,16 @@
 package com.arttttt.swapisamplemvi.ui.herodetails
 
-import androidx.lifecycle.LifecycleOwner
 import com.arttttt.swapisamplemvi.feature.herofeature.HeroFeature
 import com.arttttt.swapisamplemvi.ui.RootCoordinator
-import com.badoo.mvicore.android.AndroidBindings
+import com.arttttt.swapisamplemvi.ui.base.BaseBindings
+import com.arttttt.swapisamplemvi.ui.base.lifecycle.SimpleFragmentLifecycleOwner
 import com.badoo.mvicore.binder.using
 
-class HeroDetailsBinding(
-    lifecycleOwner: LifecycleOwner,
+class HeroDetailsBindings(
+    lifecycleOwner: SimpleFragmentLifecycleOwner,
     private val rootCoordinator: RootCoordinator,
     private val heroFeature: HeroFeature
-): AndroidBindings<HeroDetailsFragment>(lifecycleOwner) {
+): BaseBindings<HeroDetailsFragment>(lifecycleOwner) {
     override fun setup(view: HeroDetailsFragment) {
         binder.bind(heroFeature to view using { state ->
             HeroDetailsViewModel(

@@ -3,12 +3,11 @@ package com.arttttt.swapisamplemvi.ui.herodetails
 import android.content.Context
 import android.view.View
 import androidx.core.app.SharedElementCallback
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.arttttt.swapisamplemvi.R
+import com.arttttt.swapisamplemvi.ui.base.BaseBindings
 import com.arttttt.swapisamplemvi.ui.base.BaseFragment
 import com.arttttt.swapisamplemvi.ui.base.UiAction
-import com.badoo.mvicore.android.AndroidBindings
 import com.badoo.mvicore.modelWatcher
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_hero_details.*
@@ -17,14 +16,8 @@ import javax.inject.Inject
 class HeroDetailsFragment: BaseFragment<HeroDetailsFragment.HeroDetailsUiAction, HeroDetailsViewModel>(R.layout.fragment_hero_details) {
 
     companion object {
-        const val HERO_NAME = "HERO_NAME"
-
-        fun newInstance(name: String): Fragment {
-            return HeroDetailsFragment().apply {
-                arguments = bundleOf(
-                    HERO_NAME to name
-                )
-            }
+        fun newInstance(): Fragment {
+            return HeroDetailsFragment()
         }
     }
 
@@ -33,7 +26,19 @@ class HeroDetailsFragment: BaseFragment<HeroDetailsFragment.HeroDetailsUiAction,
     }
 
     @Inject
-    override lateinit var binder: AndroidBindings<BaseFragment<HeroDetailsUiAction, HeroDetailsViewModel>>
+    override lateinit var binder: BaseBindings<BaseFragment<HeroDetailsUiAction, HeroDetailsViewModel>>
+
+    override val watcher by lazy {
+        modelWatcher<HeroDetailsViewModel> {
+            (HeroDetailsViewModel::name or HeroDetailsViewModel::birthDate) { viewModel ->
+                tvHeroName.transitionName = viewModel.name
+                tvHeroName.text = viewModel.name
+                tvHeroBirthDate.text = viewModel.birthDate
+
+                startPostponedEnterTransition()
+            }
+        }
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -48,21 +53,10 @@ class HeroDetailsFragment: BaseFragment<HeroDetailsFragment.HeroDetailsUiAction,
         })
     }
 
-    override fun onViewCreated() {
-        super.onViewCreated()
+    override fun onViewPreCreated() {
+        super.onViewPreCreated()
 
-        tvHeroName.transitionName = argument(HERO_NAME)
-
-        val watcher = modelWatcher<HeroDetailsViewModel> {
-            (HeroDetailsViewModel::name or HeroDetailsViewModel::birthDate) { viewModel ->
-                tvHeroName.text = viewModel.name
-                tvHeroBirthDate.text = viewModel.birthDate
-            }
-        }
-
-        states
-            .subscribe(watcher::invoke)
-            .add()
+        postponeEnterTransition()
     }
 
     override fun onBackPressed() {

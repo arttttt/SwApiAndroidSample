@@ -4,7 +4,7 @@ import com.arttttt.swapisamplemvi.domain.entity.Hero
 import com.arttttt.swapisamplemvi.domain.repository.SwRepository
 import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature.*
 import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature.Action.Execute
-import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature.Action.LoadHeroes
+import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature.Action.LoadHeroesPage
 import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature.Effect.*
 import com.arttttt.swapisamplemvi.utils.extensions.toObservable
 import com.badoo.mvicore.element.*
@@ -18,9 +18,10 @@ class HeroesFeature @Inject constructor(
     swRepository: SwRepository
 ) : BaseFeature<Wish, Action, Effect, State, News>(
     initialState = State(
-        1,
-        false,
-        emptyList()
+        currentPage = 1,
+        isInitialLoading = false,
+        isLoadingMore = false,
+        heroes = emptyList()
     ),
     wishToAction = { Execute(it) },
     bootstrapper = BootStrapperImpl(),
@@ -32,7 +33,8 @@ class HeroesFeature @Inject constructor(
 
     data class State(
         val currentPage: Int,
-        val isLoading: Boolean,
+        val isInitialLoading: Boolean,
+        val isLoadingMore: Boolean,
         val heroes: List<Hero>
     )
 
@@ -44,25 +46,26 @@ class HeroesFeature @Inject constructor(
 
     sealed class Action {
         data class Execute(val wish: Wish) : Action()
-        object LoadHeroes: Action()
-        object DropSavedHeroes: Action()
+        object LoadInitialData: Action()
+        object LoadHeroesPage: Action()
     }
 
     sealed class Effect {
         object NoEffect: Effect()
         object Loading: Effect()
+        object InitialLoading: Effect()
         object CurrentPageIncreased: Effect()
         object SavedHeroesDropped: Effect()
         data class HeroesIsLoaded(val heroes: List<Hero>): Effect()
     }
 
     sealed class News {
-        class HeroSelected(val name: String): News()
+        class HeroSelected(val hero: Hero): News()
     }
 
     class BootStrapperImpl : Bootstrapper<Action> {
         override fun invoke(): Observable<Action> {
-            return LoadHeroes.toObservable()
+            return Action.LoadInitialData.toObservable()
         }
     }
 
@@ -72,8 +75,8 @@ class HeroesFeature @Inject constructor(
         override fun invoke(state: State, action: Action): Observable<out Effect> {
             return when (action) {
                 is Execute -> dispatchWish(action.wish)
-                is Action.DropSavedHeroes,
-                is LoadHeroes -> swRepository
+                is Action.LoadInitialData,
+                is LoadHeroesPage -> swRepository
                     .getHeroesPage(state.currentPage)
                     .map<Effect>(Effect::HeroesIsLoaded)
                     .onErrorReturn { throwable ->
@@ -83,7 +86,7 @@ class HeroesFeature @Inject constructor(
 
                         throw throwable
                     }
-                    .startWith(Loading)
+                    .startWith(if (action is Action.LoadInitialData) InitialLoading else Loading)
             }.observeOn(AndroidSchedulers.mainThread())
         }
 
@@ -100,8 +103,9 @@ class HeroesFeature @Inject constructor(
         override fun invoke(state: State, effect: Effect): State {
             return when (effect) {
                 is NoEffect -> state
-                is Loading -> state.copy(isLoading = true)
-                is HeroesIsLoaded -> state.copy(heroes = state.heroes + effect.heroes, isLoading = false)
+                is InitialLoading -> state.copy(isInitialLoading = true)
+                is Loading -> state.copy(isLoadingMore = true)
+                is HeroesIsLoaded -> state.copy(heroes = state.heroes + effect.heroes, isInitialLoading = false, isLoadingMore = false)
                 is CurrentPageIncreased -> state.copy(currentPage = state.currentPage + 1)
                 is SavedHeroesDropped -> state.copy(currentPage = 1, heroes = emptyList())
             }
@@ -110,9 +114,10 @@ class HeroesFeature @Inject constructor(
 
     class PostProcessorImpl : PostProcessor<Action, Effect, State> {
         override fun invoke(action: Action, effect: Effect, state: State): Action? {
-            return when (effect) {
-                is CurrentPageIncreased -> LoadHeroes
-                is SavedHeroesDropped -> Action.DropSavedHeroes
+            return when {
+                state.isLoadingMore || state.isInitialLoading -> null
+                effect is SavedHeroesDropped-> Action.LoadInitialData
+                effect is CurrentPageIncreased -> LoadHeroesPage
                 else -> null
             }
         }
@@ -122,7 +127,7 @@ class HeroesFeature @Inject constructor(
         override fun invoke(action: Action, effect: Effect, state: State): News? {
             return when (action) {
                 is Execute -> when (action.wish) {
-                    is Wish.OpenHeroDetails -> News.HeroSelected(state.heroes.elementAt(action.wish.index).name)
+                    is Wish.OpenHeroDetails -> News.HeroSelected(state.heroes.elementAt(action.wish.index))
                     else -> null
                 }
                 else -> null

@@ -1,4 +1,4 @@
-package com.arttttt.swapisamplemvi.ui.heroeslist.binding
+package com.arttttt.swapisamplemvi.ui.heroeslist.transfromer
 
 import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature
 import com.arttttt.swapisamplemvi.ui.heroeslist.HeroesListFragment
