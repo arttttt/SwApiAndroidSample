@@ -75,18 +75,8 @@ class HeroesFeature @Inject constructor(
         override fun invoke(state: State, action: Action): Observable<out Effect> {
             return when (action) {
                 is Execute -> dispatchWish(action.wish)
-                is Action.LoadInitialData,
-                is LoadHeroesPage -> swRepository
-                    .getHeroesPage(state.currentPage)
-                    .map<Effect>(Effect::HeroesIsLoaded)
-                    .onErrorReturn { throwable ->
-                        if (throwable is HttpException && throwable.code() == 404) {
-                            return@onErrorReturn HeroesIsLoaded(emptyList())
-                        }
-
-                        throw throwable
-                    }
-                    .startWith(if (action is Action.LoadInitialData) InitialLoading else Loading)
+                is Action.LoadInitialData -> getHeroesPage(state.currentPage).startWith(InitialLoading)
+                is LoadHeroesPage -> getHeroesPage(state.currentPage).startWith(Loading)
             }.observeOn(AndroidSchedulers.mainThread())
         }
 
@@ -96,6 +86,19 @@ class HeroesFeature @Inject constructor(
                 is Wish.OpenHeroDetails -> NoEffect.toObservable()
                 is Wish.LoadMoreHeroes -> CurrentPageIncreased.toObservable()
             }
+        }
+
+        private fun getHeroesPage(page: Int): Observable<Effect> {
+            return swRepository
+                .getHeroesPage(page)
+                .map<Effect>(Effect::HeroesIsLoaded)
+                .onErrorReturn { throwable ->
+                    if (throwable is HttpException && throwable.code() == 404) {
+                        return@onErrorReturn HeroesIsLoaded(emptyList())
+                    }
+
+                    throw throwable
+                }
         }
     }
 
