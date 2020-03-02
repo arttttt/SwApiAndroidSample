@@ -1,6 +1,7 @@
 package com.arttttt.swapisamplemvi.feature.heroesfeature
 
 import com.arttttt.swapisamplemvi.domain.entity.Hero
+import com.arttttt.swapisamplemvi.domain.entity.Heroes
 import com.arttttt.swapisamplemvi.domain.repository.SwRepository
 import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature.*
 import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature.Action.Execute
@@ -21,6 +22,7 @@ class HeroesFeature @Inject constructor(
         currentPage = 1,
         isInitialLoading = false,
         isLoadingMore = false,
+        isAllHeroesLoaded = false,
         heroes = emptyList()
     ),
     wishToAction = { Execute(it) },
@@ -33,6 +35,7 @@ class HeroesFeature @Inject constructor(
 
     data class State(
         val currentPage: Int,
+        val isAllHeroesLoaded: Boolean,
         val isInitialLoading: Boolean,
         val isLoadingMore: Boolean,
         val heroes: List<Hero>
@@ -51,12 +54,11 @@ class HeroesFeature @Inject constructor(
     }
 
     sealed class Effect {
-        object NoEffect: Effect()
         object Loading: Effect()
         object InitialLoading: Effect()
         object CurrentPageIncreased: Effect()
         object SavedHeroesDropped: Effect()
-        data class HeroesIsLoaded(val heroes: List<Hero>): Effect()
+        data class HeroesIsLoaded(val heroes: Heroes): Effect()
     }
 
     sealed class News {
@@ -74,17 +76,21 @@ class HeroesFeature @Inject constructor(
     ) : Actor<State, Action, Effect> {
         override fun invoke(state: State, action: Action): Observable<out Effect> {
             return when (action) {
-                is Execute -> dispatchWish(action.wish)
+                is Execute -> dispatchWish(state, action.wish)
                 is Action.LoadInitialData -> getHeroesPage(state.currentPage).startWith(InitialLoading)
                 is LoadHeroesPage -> getHeroesPage(state.currentPage).startWith(Loading)
             }.observeOn(AndroidSchedulers.mainThread())
         }
 
-        private fun dispatchWish(wish: Wish): Observable<out Effect> {
+        private fun dispatchWish(state: State, wish: Wish): Observable<out Effect> {
             return when (wish) {
                 is Wish.RefreshHeroes -> SavedHeroesDropped.toObservable()
-                is Wish.OpenHeroDetails -> NoEffect.toObservable()
-                is Wish.LoadMoreHeroes -> CurrentPageIncreased.toObservable()
+                is Wish.OpenHeroDetails -> Observable.empty()
+                is Wish.LoadMoreHeroes -> if (state.isAllHeroesLoaded) {
+                    Observable.empty()
+                } else {
+                    CurrentPageIncreased.toObservable()
+                }
             }
         }
 
@@ -92,23 +98,20 @@ class HeroesFeature @Inject constructor(
             return swRepository
                 .getHeroesPage(page)
                 .map<Effect>(Effect::HeroesIsLoaded)
-                .onErrorReturn { throwable ->
-                    if (throwable is HttpException && throwable.code() == 404) {
-                        return@onErrorReturn HeroesIsLoaded(emptyList())
-                    }
-
-                    throw throwable
-                }
         }
     }
 
     class ReducerImpl : Reducer<State, Effect> {
         override fun invoke(state: State, effect: Effect): State {
             return when (effect) {
-                is NoEffect -> state
                 is InitialLoading -> state.copy(isInitialLoading = true)
                 is Loading -> state.copy(isLoadingMore = true)
-                is HeroesIsLoaded -> state.copy(heroes = state.heroes + effect.heroes, isInitialLoading = false, isLoadingMore = false)
+                is HeroesIsLoaded -> state.copy(
+                    heroes = state.heroes + effect.heroes.heroes,
+                    isInitialLoading = false,
+                    isLoadingMore = false,
+                    isAllHeroesLoaded = effect.heroes.isAllHeroesLoaded
+                )
                 is CurrentPageIncreased -> state.copy(currentPage = state.currentPage + 1)
                 is SavedHeroesDropped -> state.copy(currentPage = 1, heroes = emptyList())
             }

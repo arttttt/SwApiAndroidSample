@@ -3,6 +3,7 @@ package com.arttttt.swapisamplemvi.data.repository
 import com.arttttt.swapisamplemvi.data.database.dao.HeroesDao
 import com.arttttt.swapisamplemvi.data.network.api.SwApi
 import com.arttttt.swapisamplemvi.domain.entity.Hero
+import com.arttttt.swapisamplemvi.domain.entity.Heroes
 import com.arttttt.swapisamplemvi.domain.repository.SwRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -21,10 +22,15 @@ class DefaultSwRepository @Inject constructor(
             .subscribeOn(Schedulers.io())
     }
 
-    override fun getHeroesPage(pageIndex: Int): Observable<List<Hero>> {
+    override fun getHeroesPage(pageIndex: Int): Observable<Heroes> {
         return swApi
             .searchHero(pageIndex)
-            .map { it.results.map { Hero(it.name, it.birthYear) } }
+            .map { response ->
+                Heroes(
+                    isAllHeroesLoaded = response.next == null,
+                    heroes = response.results.map { Hero(it.name, it.birthYear) }
+                )
+            }
             .toObservable()
             .subscribeOn(Schedulers.io())
             /*.flatMap { response ->
