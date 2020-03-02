@@ -58,6 +58,7 @@ class HeroesFeature @Inject constructor(
         object InitialLoading: Effect()
         object CurrentPageIncreased: Effect()
         object SavedHeroesDropped: Effect()
+        object HeroSelected: Effect()
         data class HeroesIsLoaded(val heroes: Heroes): Effect()
     }
 
@@ -85,7 +86,7 @@ class HeroesFeature @Inject constructor(
         private fun dispatchWish(state: State, wish: Wish): Observable<out Effect> {
             return when (wish) {
                 is Wish.RefreshHeroes -> SavedHeroesDropped.toObservable()
-                is Wish.OpenHeroDetails -> Observable.empty()
+                is Wish.OpenHeroDetails -> HeroSelected.toObservable()
                 is Wish.LoadMoreHeroes -> if (state.isAllHeroesLoaded) {
                     Observable.empty()
                 } else {
@@ -104,6 +105,7 @@ class HeroesFeature @Inject constructor(
     class ReducerImpl : Reducer<State, Effect> {
         override fun invoke(state: State, effect: Effect): State {
             return when (effect) {
+                is HeroSelected -> state
                 is InitialLoading -> state.copy(isInitialLoading = true)
                 is Loading -> state.copy(isLoadingMore = true)
                 is HeroesIsLoaded -> state.copy(
@@ -131,11 +133,8 @@ class HeroesFeature @Inject constructor(
 
     class NewsPublisherImpl : NewsPublisher<Action, Effect, State, News> {
         override fun invoke(action: Action, effect: Effect, state: State): News? {
-            return when (action) {
-                is Execute -> when (action.wish) {
-                    is Wish.OpenHeroDetails -> News.HeroSelected(state.heroes.elementAt(action.wish.index))
-                    else -> null
-                }
+            return when {
+                effect is HeroSelected && action is Execute && action.wish is Wish.OpenHeroDetails -> News.HeroSelected(state.heroes.elementAt(action.wish.index))
                 else -> null
             }
         }
