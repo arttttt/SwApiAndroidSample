@@ -7,10 +7,9 @@ import com.arttttt.swapisamplemvi.ui.base.lifecycle.SimpleFragmentLifecycleOwner
 import com.badoo.mvicore.binder.using
 
 class HeroDetailsBindings(
-    lifecycleOwner: SimpleFragmentLifecycleOwner,
     private val rootCoordinator: RootCoordinator,
     private val heroFeature: HeroFeature
-): BaseBindings<HeroDetailsFragment>(lifecycleOwner) {
+): BaseBindings<HeroDetailsFragment>() {
     override fun setup(view: HeroDetailsFragment) {
         binder.bind(heroFeature to view using { state ->
             HeroDetailsViewModel(
@@ -30,5 +29,9 @@ class HeroDetailsBindings(
                 is HeroDetailsFragment.HeroDetailsUiAction.BackPressed -> RootCoordinator.RootNavigationEvent.BackPressed
             }
         })
+    }
+
+    override fun clear() {
+        heroFeature.dispose()
     }
 }

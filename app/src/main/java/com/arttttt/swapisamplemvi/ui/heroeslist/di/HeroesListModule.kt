@@ -28,14 +28,12 @@ class HeroesListModule {
     @PerFragment
     @Provides
     fun provideHeroesListBindings(
-        fragment: HeroesListFragment,
         heroesFeature: HeroesFeature,
         heroFeature: HeroFeature,
         coordinator: RootCoordinator,
         transformer: HeroesListFragmentEventsTransformer
     ): BaseBindings<BaseFragment<HeroesListFragment.HeroesListUiAction, HeroesListViewModel>> {
         return HeroesListBindings(
-            lifecycleOwner = fragment,
             heroesFeature = heroesFeature,
             heroFeature = heroFeature,
             coordinator = coordinator,

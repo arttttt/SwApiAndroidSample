@@ -4,7 +4,6 @@ import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature
 import com.arttttt.swapisamplemvi.feature.herofeature.HeroFeature
 import com.arttttt.swapisamplemvi.ui.RootCoordinator
 import com.arttttt.swapisamplemvi.ui.base.BaseBindings
-import com.arttttt.swapisamplemvi.ui.base.lifecycle.SimpleFragmentLifecycleOwner
 import com.arttttt.swapisamplemvi.ui.base.recyclerview.IListItem
 import com.arttttt.swapisamplemvi.ui.common.ProgressAdapterItem
 import com.arttttt.swapisamplemvi.ui.heroeslist.HeroesListFragment
@@ -14,12 +13,11 @@ import com.arttttt.swapisamplemvi.ui.heroeslist.transfromer.HeroesListFragmentEv
 import com.badoo.mvicore.binder.using
 
 class HeroesListBindings(
-    lifecycleOwner: SimpleFragmentLifecycleOwner,
     private val heroesListFragmentEventsTransformer: HeroesListFragmentEventsTransformer,
     private val coordinator: RootCoordinator,
     private val heroesFeature: HeroesFeature,
     private val heroFeature: HeroFeature
-): BaseBindings<HeroesListFragment>(lifecycleOwner) {
+): BaseBindings<HeroesListFragment>() {
     override fun setup(view: HeroesListFragment) {
         binder.bind(heroesFeature to view using { state ->
             HeroesListViewModel(
@@ -52,5 +50,9 @@ class HeroesListBindings(
                 is HeroesFeature.News.HeroSelected -> RootCoordinator.RootNavigationEvent.OpenHeroDetails
             }
         })
+    }
+
+    override fun clear() {
+        heroesFeature.dispose()
     }
 }

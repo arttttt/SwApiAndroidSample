@@ -64,6 +64,7 @@ abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        lifecycleListener = binder
         binder.setup(this)
     }
 

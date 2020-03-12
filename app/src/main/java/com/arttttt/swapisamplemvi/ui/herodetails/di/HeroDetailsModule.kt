@@ -18,12 +18,10 @@ class HeroDetailsModule {
     @PerFragment
     @Provides
     fun provideHeroDetailsBindings(
-        fragment: HeroDetailsFragment,
         heroFeature: HeroFeature,
         rootCoordinator: RootCoordinator
     ): BaseBindings<BaseFragment<HeroDetailsFragment.HeroDetailsUiAction, HeroDetailsViewModel>> {
         return HeroDetailsBindings(
-            lifecycleOwner = fragment,
             heroFeature = heroFeature,
             rootCoordinator = rootCoordinator
         ).unsafeCastTo()
