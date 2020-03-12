@@ -37,7 +37,11 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, He
 
     override val watcher by lazy {
         modelWatcher<HeroesListViewModel> {
-            watch(HeroesListViewModel::isLoading, byValue(), refreshLayout::setRefreshing)
+            HeroesListViewModel::isLoading { isLoading ->
+                if (refreshLayout.isRefreshing != isLoading) {
+                    refreshLayout.isRefreshing = isLoading
+                }
+            }
             watch(HeroesListViewModel::items, byValue(), adapter::setItems)
         }
     }
