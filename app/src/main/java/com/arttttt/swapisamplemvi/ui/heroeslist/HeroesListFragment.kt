@@ -12,6 +12,7 @@ import com.arttttt.swapisamplemvi.ui.base.SharedElementProvider
 import com.arttttt.swapisamplemvi.ui.base.UiAction
 import com.arttttt.swapisamplemvi.ui.base.recyclerview.ListDifferAdapter
 import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroItemListener
+import com.badoo.mvicore.ModelWatcher
 import com.badoo.mvicore.byValue
 import com.badoo.mvicore.modelWatcher
 import com.jakewharton.rxbinding3.swiperefreshlayout.refreshes
@@ -34,17 +35,6 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, He
 
     @Inject
     override lateinit var binder: BaseBindings<BaseFragment<HeroesListUiAction, HeroesListViewModel>>
-
-    override val watcher by lazy {
-        modelWatcher<HeroesListViewModel> {
-            HeroesListViewModel::isLoading { isLoading ->
-                if (refreshLayout.isRefreshing != isLoading) {
-                    refreshLayout.isRefreshing = isLoading
-                }
-            }
-            watch(HeroesListViewModel::items, byValue(), adapter::setItems)
-        }
-    }
 
     @Inject
     protected lateinit var adapterFactory: ListDifferAdapterFactory
@@ -102,6 +92,13 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, He
         Observable
             .just(HeroesListUiAction.BackPressed)
             .emitUiAction()
+    }
+
+    override fun getModelWatcher(): ModelWatcher<HeroesListViewModel> {
+        return modelWatcher {
+            watch(HeroesListViewModel::isLoading, byValue(), refreshLayout::setRefreshing)
+            watch(HeroesListViewModel::items, byValue(), adapter::setItems)
+        }
     }
 
     override fun provideSharedElement(): View {

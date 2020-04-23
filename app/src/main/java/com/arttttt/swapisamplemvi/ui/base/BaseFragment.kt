@@ -38,17 +38,17 @@ abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
     }
 
     protected abstract val binder: BaseBindings<BaseFragment<A, S>>
-    protected abstract val watcher: ModelWatcher<S>
     protected open val sharedElementTransition: Transition? = ChangeTransform()
 
     override var lifecycleListener: SimpleFragmentLifecycle? = null
 
+    private var watcher: ModelWatcher<S>? = null
+
     override fun accept(viewModel: S?) {
         if (viewModel == null) return
 
-        watcher.invoke(viewModel)
+        watcher?.invoke(viewModel)
     }
-
 
     @CallSuper
     override fun onAttach(context: Context) {
@@ -74,6 +74,7 @@ abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
 
     final override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        watcher = getModelWatcher()
         onViewPreCreated()
         onViewCreated()
         lifecycleListener?.onViewCreated()
@@ -84,6 +85,8 @@ abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
         lifecycleListener?.onViewDestroyed()
         super.onDestroyView()
         compositeDisposable.clear()
+        watcher?.clear()
+        watcher = null
     }
 
     @CallSuper
@@ -102,6 +105,8 @@ abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
 
     open fun onViewPreCreated() {}
     open fun onViewCreated() {}
+
+    protected abstract fun getModelWatcher(): ModelWatcher<S>
 
     @Suppress("UNCHECKED_CAST")
     protected fun<T> Fragment.argument(key: String, defValue: T? = null): T {
