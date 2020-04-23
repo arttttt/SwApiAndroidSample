@@ -15,7 +15,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "API_URL", '"https://swapi.co/api/"'
+        buildConfigField "String", "API_URL", '"https://swapi.dev/api/"'
     }
 
     buildTypes {
@@ -45,7 +45,7 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.2.0'
-    implementation 'com.google.android.material:material:1.2.0-alpha05'
+    implementation 'com.google.android.material:material:1.2.0-alpha06'
 
     implementation 'androidx.room:room-runtime:2.2.5'
     implementation 'androidx.room:room-rxjava2:2.2.5'
