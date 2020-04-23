@@ -80,7 +80,7 @@ class HeroesFeature @Inject constructor(
                 is Execute -> dispatchWish(state, action.wish)
                 is Action.LoadInitialData -> getHeroesPage(state.currentPage).startWith(InitialLoading)
                 is LoadHeroesPage -> getHeroesPage(state.currentPage).startWith(Loading)
-            }.observeOn(AndroidSchedulers.mainThread())
+            }
         }
 
         private fun dispatchWish(state: State, wish: Wish): Observable<out Effect> {
@@ -99,6 +99,7 @@ class HeroesFeature @Inject constructor(
             return swRepository
                 .getHeroesPage(page)
                 .map<Effect>(Effect::HeroesIsLoaded)
+                .observeOn(AndroidSchedulers.mainThread())
         }
     }
 
