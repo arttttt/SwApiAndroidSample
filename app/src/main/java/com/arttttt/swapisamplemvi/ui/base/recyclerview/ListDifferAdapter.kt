@@ -7,9 +7,8 @@ import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
 import com.hannesdorfmann.adapterdelegates4.AsyncListDifferDelegationAdapter
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import javax.inject.Inject
 
-class ListDifferAdapter @Inject constructor(
+class ListDifferAdapter(
     diffCallback: DiffUtil.ItemCallback<IListItem>,
     delegates: Set<AdapterDelegate<List<IListItem>>>
 ) : AsyncListDifferDelegationAdapter<IListItem>(diffCallback, *delegates.toTypedArray()) {

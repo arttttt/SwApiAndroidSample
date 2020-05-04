@@ -9,9 +9,8 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class DefaultSwRepository @Inject constructor(
+class DefaultSwRepository(
     private val swApi: SwApi,
     private val heroesDao: HeroesDao
 ): SwRepository {

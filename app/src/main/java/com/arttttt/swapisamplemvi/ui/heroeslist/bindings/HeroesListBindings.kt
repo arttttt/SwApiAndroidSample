@@ -1,7 +1,7 @@
 package com.arttttt.swapisamplemvi.ui.heroeslist.bindings
 
-import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature
-import com.arttttt.swapisamplemvi.feature.herofeature.HeroFeature
+import com.arttttt.swapisamplemvi.domain.feature.heroesfeature.HeroesFeature
+import com.arttttt.swapisamplemvi.domain.feature.herofeature.HeroFeature
 import com.arttttt.swapisamplemvi.ui.RootCoordinator
 import com.arttttt.swapisamplemvi.ui.base.BaseBindings
 import com.arttttt.swapisamplemvi.ui.base.recyclerview.IListItem

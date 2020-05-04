@@ -1,21 +1,15 @@
 package com.arttttt.swapisamplemvi.ui.base
 
-import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import androidx.transition.ChangeTransform
-import androidx.transition.Transition
 import com.arttttt.swapisamplemvi.ui.base.lifecycle.SimpleFragmentLifecycle
 import com.arttttt.swapisamplemvi.ui.base.lifecycle.SimpleFragmentLifecycleOwner
 import com.badoo.mvicore.ModelWatcher
 import com.jakewharton.rxrelay2.PublishRelay
 import com.jakewharton.rxrelay2.Relay
-import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.disposables.CompositeDisposable
@@ -23,22 +17,18 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 
 abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
+    @LayoutRes layoutRes: Int,
     private val compositeDisposable: CompositeDisposable,
     protected val uiActions: Relay<A>
-) : Fragment(),
+) : KoinFragment(layoutRes),
     SimpleFragmentLifecycleOwner,
     Consumer<S>,
     IBackHandler,
     ObservableSource<A> by uiActions
 {
-    private var layoutRes: Int = 0
+    constructor(@LayoutRes layoutRes: Int): this(layoutRes, CompositeDisposable(), PublishRelay.create())
 
-    constructor(@LayoutRes layoutRes: Int): this(CompositeDisposable(), PublishRelay.create()) {
-        this.layoutRes = layoutRes
-    }
-
-    protected abstract val binder: BaseBindings<BaseFragment<A, S>>
-    protected open val sharedElementTransition: Transition? = ChangeTransform()
+    protected val binder by lazy { scope.get<BaseBindings<BaseFragment<A, S>>>() }
 
     override var lifecycleListener: SimpleFragmentLifecycle? = null
 
@@ -51,25 +41,11 @@ abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
     }
 
     @CallSuper
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        sharedElementTransition?.let { transition ->
-            sharedElementEnterTransition = transition
-            sharedElementReturnTransition = transition
-        }
-        super.onAttach(context)
-    }
-
-    @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         lifecycleListener = binder
         binder.setup(this)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(layoutRes, container, false)
     }
 
     final override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -95,11 +71,11 @@ abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
         compositeDisposable.dispose()
     }
 
-    protected fun Observable<out A>.emitUiAction() {
-        subscribe(uiActions).add()
+    protected fun Observable<out A>.bindUiAction() {
+        subscribe(uiActions).untilDestroyView()
     }
 
-    protected fun Disposable.add() {
+    protected fun Disposable.untilDestroyView() {
         compositeDisposable.add(this)
     }
 

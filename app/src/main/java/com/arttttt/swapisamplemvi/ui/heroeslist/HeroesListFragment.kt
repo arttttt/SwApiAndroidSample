@@ -1,30 +1,25 @@
 package com.arttttt.swapisamplemvi.ui.heroeslist
 
-import android.content.Context
-import android.view.View
-import androidx.core.app.SharedElementCallback
 import androidx.core.view.doOnPreDraw
+import androidx.recyclerview.widget.DiffUtil
 import com.arttttt.swapisamplemvi.R
-import com.arttttt.swapisamplemvi.di.factories.ListDifferAdapterFactory
 import com.arttttt.swapisamplemvi.ui.base.BaseBindings
 import com.arttttt.swapisamplemvi.ui.base.BaseFragment
-import com.arttttt.swapisamplemvi.ui.base.SharedElementProvider
 import com.arttttt.swapisamplemvi.ui.base.UiAction
 import com.arttttt.swapisamplemvi.ui.base.recyclerview.ListDifferAdapter
 import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroItemListener
 import com.badoo.mvicore.ModelWatcher
 import com.badoo.mvicore.byValue
 import com.badoo.mvicore.modelWatcher
+import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
 import com.jakewharton.rxbinding3.swiperefreshlayout.refreshes
 import io.reactivex.Observable
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_list.*
-import kotlinx.android.synthetic.main.item_hero.view.*
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
-class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, HeroesListViewModel>(R.layout.fragment_list),
-    SharedElementProvider,
-    HeroItemListener {
+class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, HeroesListViewModel>(R.layout.fragment_list), HeroItemListener {
 
     sealed class HeroesListUiAction: UiAction {
         object Refresh: HeroesListUiAction()
@@ -33,34 +28,10 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, He
         class HeroClicked(val position: Int): HeroesListUiAction()
     }
 
-    @Inject
-    override lateinit var binder: BaseBindings<BaseFragment<HeroesListUiAction, HeroesListViewModel>>
-
-    @Inject
-    protected lateinit var adapterFactory: ListDifferAdapterFactory
-
-    private val adapter: ListDifferAdapter by lazy { adapterFactory.create() }
-
-    private var clickedPosition = 0
+    private val adapter: ListDifferAdapter by inject { parametersOf(scope.get<DiffUtil.ItemCallback<*>>(), scope.get<Set<AdapterDelegate<*>>>() { parametersOf(this) }) }
 
     override val clicks: Consumer<Int> = Consumer { position ->
-        clickedPosition = position
         uiActions.accept(HeroesListUiAction.HeroClicked(position))
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        setExitSharedElementCallback(object: SharedElementCallback() {
-            override fun onMapSharedElements(
-                names: MutableList<String>,
-                sharedElements: MutableMap<String, View>
-            ) {
-                val holder = rvHeroes.findViewHolderForAdapterPosition(clickedPosition) ?: return
-
-                sharedElements[names.first()] = holder.itemView.tvHeroName
-            }
-        })
     }
 
     override fun onViewPreCreated() {
@@ -78,12 +49,12 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, He
         adapter
             .loadMoreObservable
             .map { HeroesListUiAction.LoadMoreHeroes }
-            .emitUiAction()
+            .bindUiAction()
 
         refreshLayout
             .refreshes()
             .map { HeroesListUiAction.Refresh }
-            .emitUiAction()
+            .bindUiAction()
 
         rvHeroes.adapter = adapter
     }
@@ -91,7 +62,7 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, He
     override fun onBackPressed() {
         Observable
             .just(HeroesListUiAction.BackPressed)
-            .emitUiAction()
+            .bindUiAction()
     }
 
     override fun getModelWatcher(): ModelWatcher<HeroesListViewModel> {
@@ -99,11 +70,5 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, He
             watch(HeroesListViewModel::isLoading, byValue(), refreshLayout::setRefreshing)
             watch(HeroesListViewModel::items, byValue(), adapter::setItems)
         }
-    }
-
-    override fun provideSharedElement(): View {
-        val holder = rvHeroes.findViewHolderForAdapterPosition(clickedPosition)!!
-
-        return holder.itemView.tvHeroName
     }
 }

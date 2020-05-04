@@ -1,14 +1,13 @@
 package com.arttttt.swapisamplemvi.ui.heroeslist.transfromer
 
-import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature
+import com.arttttt.swapisamplemvi.domain.feature.heroesfeature.HeroesFeature
 import com.arttttt.swapisamplemvi.ui.heroeslist.HeroesListFragment
 import com.badoo.mvicore.connector.Connector
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
-class HeroesListFragmentEventsTransformer @Inject constructor(): Connector<HeroesListFragment.HeroesListUiAction, HeroesFeature.Wish> {
+class HeroesListFragmentEventsTransformer: Connector<HeroesListFragment.HeroesListUiAction, HeroesFeature.Wish> {
     override fun invoke(element: ObservableSource<out HeroesListFragment.HeroesListUiAction>): ObservableSource<HeroesFeature.Wish> {
         return Observable
             .wrap(element)

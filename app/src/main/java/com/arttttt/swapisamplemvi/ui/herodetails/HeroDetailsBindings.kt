@@ -1,9 +1,8 @@
 package com.arttttt.swapisamplemvi.ui.herodetails
 
-import com.arttttt.swapisamplemvi.feature.herofeature.HeroFeature
+import com.arttttt.swapisamplemvi.domain.feature.herofeature.HeroFeature
 import com.arttttt.swapisamplemvi.ui.RootCoordinator
 import com.arttttt.swapisamplemvi.ui.base.BaseBindings
-import com.arttttt.swapisamplemvi.ui.base.lifecycle.SimpleFragmentLifecycleOwner
 import com.badoo.mvicore.binder.using
 
 class HeroDetailsBindings(

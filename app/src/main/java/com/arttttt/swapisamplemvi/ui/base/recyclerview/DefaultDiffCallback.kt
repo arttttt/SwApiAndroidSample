@@ -2,9 +2,8 @@ package com.arttttt.swapisamplemvi.ui.base.recyclerview
 
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.DiffUtil
-import javax.inject.Inject
 
-open class DefaultDiffCallback @Inject constructor(): DiffUtil.ItemCallback<IListItem>() {
+open class DefaultDiffCallback: DiffUtil.ItemCallback<IListItem>() {
     override fun areItemsTheSame(oldItem: IListItem, newItem: IListItem): Boolean {
         return oldItem::class == newItem::class
     }

@@ -1,9 +1,9 @@
-package com.arttttt.swapisamplemvi.feature.herofeature
+package com.arttttt.swapisamplemvi.domain.feature.herofeature
 
 import com.arttttt.swapisamplemvi.domain.entity.Hero
-import com.arttttt.swapisamplemvi.feature.herofeature.HeroFeature.*
-import com.arttttt.swapisamplemvi.feature.herofeature.HeroFeature.News.HeroInformationReceived
-import com.arttttt.swapisamplemvi.feature.herofeature.HeroFeature.Wish.OpenHeroDetails
+import com.arttttt.swapisamplemvi.domain.feature.herofeature.HeroFeature.*
+import com.arttttt.swapisamplemvi.domain.feature.herofeature.HeroFeature.News.HeroInformationReceived
+import com.arttttt.swapisamplemvi.domain.feature.herofeature.HeroFeature.Wish.OpenHeroDetails
 import com.badoo.mvicore.element.Reducer
 import com.badoo.mvicore.feature.ReducerFeature
 

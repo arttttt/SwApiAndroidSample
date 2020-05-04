@@ -1,21 +1,19 @@
-package com.arttttt.swapisamplemvi.feature.heroesfeature
+package com.arttttt.swapisamplemvi.domain.feature.heroesfeature
 
 import com.arttttt.swapisamplemvi.domain.entity.Hero
 import com.arttttt.swapisamplemvi.domain.entity.Heroes
 import com.arttttt.swapisamplemvi.domain.repository.SwRepository
-import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature.*
-import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature.Action.Execute
-import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature.Action.LoadHeroesPage
-import com.arttttt.swapisamplemvi.feature.heroesfeature.HeroesFeature.Effect.*
+import com.arttttt.swapisamplemvi.domain.feature.heroesfeature.HeroesFeature.*
+import com.arttttt.swapisamplemvi.domain.feature.heroesfeature.HeroesFeature.Action.Execute
+import com.arttttt.swapisamplemvi.domain.feature.heroesfeature.HeroesFeature.Action.LoadHeroesPage
+import com.arttttt.swapisamplemvi.domain.feature.heroesfeature.HeroesFeature.Effect.*
 import com.arttttt.swapisamplemvi.utils.extensions.toObservable
 import com.badoo.mvicore.element.*
 import com.badoo.mvicore.feature.BaseFeature
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import retrofit2.HttpException
-import javax.inject.Inject
 
-class HeroesFeature @Inject constructor(
+class HeroesFeature(
     swRepository: SwRepository
 ) : BaseFeature<Wish, Action, Effect, State, News>(
     initialState = State(
