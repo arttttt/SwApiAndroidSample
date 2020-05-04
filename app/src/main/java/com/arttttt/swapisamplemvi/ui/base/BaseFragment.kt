@@ -8,27 +8,23 @@ import androidx.fragment.app.Fragment
 import com.arttttt.swapisamplemvi.ui.base.lifecycle.SimpleFragmentLifecycle
 import com.arttttt.swapisamplemvi.ui.base.lifecycle.SimpleFragmentLifecycleOwner
 import com.badoo.mvicore.ModelWatcher
-import com.jakewharton.rxrelay2.PublishRelay
-import com.jakewharton.rxrelay2.Relay
 import io.reactivex.Observable
-import io.reactivex.ObservableSource
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 
 abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
     @LayoutRes layoutRes: Int,
-    private val compositeDisposable: CompositeDisposable,
-    protected val uiActions: Relay<A>
+    private val compositeDisposable: CompositeDisposable
 ) : KoinFragment(layoutRes),
     SimpleFragmentLifecycleOwner,
     Consumer<S>,
-    IBackHandler,
-    ObservableSource<A> by uiActions
+    IBackHandler
 {
-    constructor(@LayoutRes layoutRes: Int): this(layoutRes, CompositeDisposable(), PublishRelay.create())
+    constructor(@LayoutRes layoutRes: Int): this(layoutRes, CompositeDisposable())
 
     protected val binder by lazy { scope.get<BaseBindings<BaseFragment<A, S>>>() }
+    val uiActions by lazy { scope.get<UiActionsDelegate<A>>() }
 
     override var lifecycleListener: SimpleFragmentLifecycle? = null
 

@@ -11,21 +11,21 @@ class HeroDetailsBindings(
 ): BaseBindings<HeroDetailsFragment>() {
     override fun setup(view: HeroDetailsFragment) {
         binder.bind(heroFeature to view using { state ->
-            HeroDetailsViewModel(
+            HeroDetailsFragment.ViewModel(
                 name = state.hero?.name ?: "",
                 birthDate = state.hero?.birthYear ?: ""
             )
         })
 
-        binder.bind(view to heroFeature using { event ->
+        binder.bind(view.uiActions to heroFeature using { event ->
             when (event) {
-                is HeroDetailsFragment.HeroDetailsUiAction.BackPressed -> null
+                is HeroDetailsFragment.Action.BackPressed -> null
             }
         })
 
-        binder.bind(view to rootCoordinator using { event ->
+        binder.bind(view.uiActions to rootCoordinator using { event ->
             when (event) {
-                is HeroDetailsFragment.HeroDetailsUiAction.BackPressed -> RootCoordinator.RootNavigationEvent.BackPressed
+                is HeroDetailsFragment.Action.BackPressed -> RootCoordinator.RootNavigationEvent.BackPressed
             }
         })
     }

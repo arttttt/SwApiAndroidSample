@@ -4,27 +4,27 @@ import androidx.recyclerview.widget.DiffUtil
 import com.arttttt.swapisamplemvi.domain.feature.heroesfeature.HeroesFeature
 import com.arttttt.swapisamplemvi.domain.feature.herofeature.HeroFeature
 import com.arttttt.swapisamplemvi.ui.base.BaseBindings
+import com.arttttt.swapisamplemvi.ui.base.UiActionsDelegate
 import com.arttttt.swapisamplemvi.ui.base.recyclerview.DefaultDiffCallback
 import com.arttttt.swapisamplemvi.ui.base.recyclerview.IListItem
 import com.arttttt.swapisamplemvi.ui.common.ProgressAdapterDelegate
-import com.arttttt.swapisamplemvi.ui.heroeslist.HeroesListFragment
-import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroAdapterDelegate
-import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroAdapterItem
-import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroItemListener
-import com.arttttt.swapisamplemvi.ui.heroeslist.bindings.HeroesListBindings
-import com.arttttt.swapisamplemvi.ui.heroeslist.transfromer.HeroesListFragmentEventsTransformer
+import com.arttttt.swapisamplemvi.ui.heroeslist.HeroesListUiActionsDelegate
+import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.delegates.HeroAdapterDelegate
+import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.models.HeroAdapterItem
+import com.arttttt.swapisamplemvi.ui.heroeslist.HeroesListBindings
+import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.delegates.HeroItemListener
+import com.arttttt.swapisamplemvi.ui.heroeslist.transfromer.HeroesListTransformer
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
-import io.reactivex.functions.Consumer
+import org.koin.dsl.bind
 import org.koin.dsl.module
-import timber.log.Timber
 
 val heroesListModule = module {
-    scope<HeroesListFragment> {
+    scope<com.arttttt.swapisamplemvi.ui.heroeslist.HeroesListFragment> {
         scoped { HeroFeature() }
 
         scoped<BaseBindings<*>> {
             HeroesListBindings(
-                heroesListFragmentEventsTransformer = HeroesListFragmentEventsTransformer(),
+                transformer = HeroesListTransformer(),
                 heroFeature = get(),
                 coordinator = get(),
                 heroesFeature = HeroesFeature(
@@ -45,11 +45,17 @@ val heroesListModule = module {
             }
         }
 
-        scoped<Set<AdapterDelegate<*>>> { (listener: HeroesListFragment) ->
+        scoped<Set<AdapterDelegate<*>>> {
             setOf(
-                HeroAdapterDelegate(listener),
+                HeroAdapterDelegate(
+                    listener = get()
+                ),
                 ProgressAdapterDelegate()
             )
         }
+
+        scoped<UiActionsDelegate<*>> {
+            HeroesListUiActionsDelegate()
+        } bind HeroItemListener::class
     }
 }

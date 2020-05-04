@@ -31,7 +31,6 @@ class DefaultSwRepository(
                 )
             }
             .toObservable()
-            .subscribeOn(Schedulers.io())
             /*.flatMap { response ->
                 heroesDao
                     .insertHeroes(*response.results.map { hero ->

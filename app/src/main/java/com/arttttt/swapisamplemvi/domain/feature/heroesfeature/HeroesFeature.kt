@@ -2,11 +2,11 @@ package com.arttttt.swapisamplemvi.domain.feature.heroesfeature
 
 import com.arttttt.swapisamplemvi.domain.entity.Hero
 import com.arttttt.swapisamplemvi.domain.entity.Heroes
-import com.arttttt.swapisamplemvi.domain.repository.SwRepository
 import com.arttttt.swapisamplemvi.domain.feature.heroesfeature.HeroesFeature.*
 import com.arttttt.swapisamplemvi.domain.feature.heroesfeature.HeroesFeature.Action.Execute
 import com.arttttt.swapisamplemvi.domain.feature.heroesfeature.HeroesFeature.Action.LoadHeroesPage
 import com.arttttt.swapisamplemvi.domain.feature.heroesfeature.HeroesFeature.Effect.*
+import com.arttttt.swapisamplemvi.domain.repository.SwRepository
 import com.arttttt.swapisamplemvi.utils.extensions.toObservable
 import com.badoo.mvicore.element.*
 import com.badoo.mvicore.feature.BaseFeature
@@ -18,9 +18,9 @@ class HeroesFeature(
 ) : BaseFeature<Wish, Action, Effect, State, News>(
     initialState = State(
         currentPage = 1,
-        isInitialLoading = false,
+        isLoading = false,
         isLoadingMore = false,
-        isAllHeroesLoaded = false,
+        fullData = false,
         heroes = emptyList()
     ),
     wishToAction = { Execute(it) },
@@ -33,8 +33,8 @@ class HeroesFeature(
 
     data class State(
         val currentPage: Int,
-        val isAllHeroesLoaded: Boolean,
-        val isInitialLoading: Boolean,
+        val fullData: Boolean,
+        val isLoading: Boolean,
         val isLoadingMore: Boolean,
         val heroes: List<Hero>
     )
@@ -76,8 +76,8 @@ class HeroesFeature(
         override fun invoke(state: State, action: Action): Observable<out Effect> {
             return when (action) {
                 is Execute -> dispatchWish(state, action.wish)
-                is Action.LoadInitialData -> getHeroesPage(state.currentPage).startWith(InitialLoading)
-                is LoadHeroesPage -> getHeroesPage(state.currentPage).startWith(Loading)
+                is Action.LoadInitialData -> getHeroesPage(state.currentPage, InitialLoading)
+                is LoadHeroesPage -> getHeroesPage(state.currentPage, Loading)
             }
         }
 
@@ -85,19 +85,22 @@ class HeroesFeature(
             return when (wish) {
                 is Wish.RefreshHeroes -> SavedHeroesDropped.toObservable()
                 is Wish.OpenHeroDetails -> HeroSelected.toObservable()
-                is Wish.LoadMoreHeroes -> if (state.isAllHeroesLoaded) {
-                    Observable.empty()
-                } else {
-                    CurrentPageIncreased.toObservable()
+                is Wish.LoadMoreHeroes -> {
+                    if (state.isLoading || state.isLoadingMore || state.fullData) {
+                        Observable.empty()
+                    } else {
+                        CurrentPageIncreased.toObservable()
+                    }
                 }
             }
         }
 
-        private fun getHeroesPage(page: Int): Observable<Effect> {
+        private fun getHeroesPage(page: Int, initialEffect: Effect): Observable<out Effect> {
             return swRepository
                 .getHeroesPage(page)
                 .map<Effect>(Effect::HeroesIsLoaded)
                 .observeOn(AndroidSchedulers.mainThread())
+                .startWith(initialEffect)
         }
     }
 
@@ -105,16 +108,25 @@ class HeroesFeature(
         override fun invoke(state: State, effect: Effect): State {
             return when (effect) {
                 is HeroSelected -> state
-                is InitialLoading -> state.copy(isInitialLoading = true)
-                is Loading -> state.copy(isLoadingMore = true)
+                is InitialLoading -> state.copy(
+                    isLoading = true
+                )
+                is Loading -> state.copy(
+                    isLoadingMore = true
+                )
                 is HeroesIsLoaded -> state.copy(
                     heroes = state.heroes + effect.heroes.heroes,
-                    isInitialLoading = false,
+                    isLoading = false,
                     isLoadingMore = false,
-                    isAllHeroesLoaded = effect.heroes.isAllHeroesLoaded
+                    fullData = effect.heroes.isAllHeroesLoaded
                 )
-                is CurrentPageIncreased -> state.copy(currentPage = state.currentPage + 1)
-                is SavedHeroesDropped -> state.copy(currentPage = 1, heroes = emptyList())
+                is CurrentPageIncreased -> state.copy(
+                    currentPage = state.currentPage + 1
+                )
+                is SavedHeroesDropped -> state.copy(
+                    currentPage = 1,
+                    heroes = emptyList()
+                )
             }
         }
     }
@@ -122,7 +134,7 @@ class HeroesFeature(
     class PostProcessorImpl : PostProcessor<Action, Effect, State> {
         override fun invoke(action: Action, effect: Effect, state: State): Action? {
             return when {
-                state.isLoadingMore || state.isInitialLoading -> null
+                state.isLoadingMore || state.isLoading -> null
                 effect is SavedHeroesDropped-> Action.LoadInitialData
                 effect is CurrentPageIncreased -> LoadHeroesPage
                 else -> null

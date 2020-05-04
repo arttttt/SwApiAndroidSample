@@ -1,74 +1,63 @@
 package com.arttttt.swapisamplemvi.ui.heroeslist
 
-import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.DiffUtil
 import com.arttttt.swapisamplemvi.R
-import com.arttttt.swapisamplemvi.ui.base.BaseBindings
 import com.arttttt.swapisamplemvi.ui.base.BaseFragment
 import com.arttttt.swapisamplemvi.ui.base.UiAction
+import com.arttttt.swapisamplemvi.ui.base.recyclerview.IListItem
 import com.arttttt.swapisamplemvi.ui.base.recyclerview.ListDifferAdapter
-import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroItemListener
+import com.arttttt.swapisamplemvi.utils.extensions.toObservable
 import com.badoo.mvicore.ModelWatcher
 import com.badoo.mvicore.byValue
 import com.badoo.mvicore.modelWatcher
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
 import com.jakewharton.rxbinding3.swiperefreshlayout.refreshes
-import io.reactivex.Observable
-import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_list.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
-class HeroesListFragment: BaseFragment<HeroesListFragment.HeroesListUiAction, HeroesListViewModel>(R.layout.fragment_list), HeroItemListener {
+class HeroesListFragment: BaseFragment<HeroesListFragment.Action, HeroesListFragment.ViewModel>(R.layout.fragment_list) {
 
-    sealed class HeroesListUiAction: UiAction {
-        object Refresh: HeroesListUiAction()
-        object BackPressed: HeroesListUiAction()
-        object LoadMoreHeroes: HeroesListUiAction()
-        class HeroClicked(val position: Int): HeroesListUiAction()
+    sealed class Action: UiAction {
+        object Refresh: Action()
+        object BackPressed: Action()
+        object LoadMoreHeroes: Action()
+        class HeroClicked(val position: Int): Action()
     }
 
-    private val adapter: ListDifferAdapter by inject { parametersOf(scope.get<DiffUtil.ItemCallback<*>>(), scope.get<Set<AdapterDelegate<*>>>() { parametersOf(this) }) }
+    data class ViewModel(
+        val isLoading: Boolean,
+        val items: List<IListItem>
+    ): com.arttttt.swapisamplemvi.ui.base.ViewModel
 
-    override val clicks: Consumer<Int> = Consumer { position ->
-        uiActions.accept(HeroesListUiAction.HeroClicked(position))
-    }
-
-    override fun onViewPreCreated() {
-        super.onViewPreCreated()
-
-        postponeEnterTransition()
-        requireView().doOnPreDraw {
-            startPostponedEnterTransition()
-        }
-    }
+    private val adapter: ListDifferAdapter by inject { parametersOf(scope.get<DiffUtil.ItemCallback<*>>(), scope.get<Set<AdapterDelegate<*>>>()) }
 
     override fun onViewCreated() {
         super.onViewCreated()
 
         adapter
             .loadMoreObservable
-            .map { HeroesListUiAction.LoadMoreHeroes }
+            .map { Action.LoadMoreHeroes }
             .bindUiAction()
 
         refreshLayout
             .refreshes()
-            .map { HeroesListUiAction.Refresh }
+            .map { Action.Refresh }
             .bindUiAction()
 
         rvHeroes.adapter = adapter
     }
 
     override fun onBackPressed() {
-        Observable
-            .just(HeroesListUiAction.BackPressed)
+        Action.BackPressed
+            .toObservable()
             .bindUiAction()
     }
 
-    override fun getModelWatcher(): ModelWatcher<HeroesListViewModel> {
+    override fun getModelWatcher(): ModelWatcher<ViewModel> {
         return modelWatcher {
-            watch(HeroesListViewModel::isLoading, byValue(), refreshLayout::setRefreshing)
-            watch(HeroesListViewModel::items, byValue(), adapter::setItems)
+            watch(ViewModel::isLoading, byValue(), refreshLayout::setRefreshing)
+            watch(ViewModel::items, byValue(), adapter::setItems)
         }
     }
 }

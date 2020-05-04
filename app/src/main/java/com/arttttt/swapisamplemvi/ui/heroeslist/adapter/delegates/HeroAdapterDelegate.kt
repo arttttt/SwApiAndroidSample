@@ -1,7 +1,8 @@
-package com.arttttt.swapisamplemvi.ui.heroeslist.adapter
+package com.arttttt.swapisamplemvi.ui.heroeslist.adapter.delegates
 
 import com.arttttt.swapisamplemvi.R
 import com.arttttt.swapisamplemvi.ui.base.recyclerview.IListItem
+import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.models.HeroAdapterItem
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateLayoutContainer
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.functions.Consumer

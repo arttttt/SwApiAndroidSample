@@ -17,3 +17,15 @@ inline fun<reified T>Any?.castTo(): T? {
 inline fun<reified T>Any.unsafeCastTo(): T {
     return this as T
 }
+
+inline fun invokeIf(predicate: () -> Boolean, block: () -> Unit) {
+    if (predicate()) {
+        block()
+    }
+}
+
+inline fun invokeIfNot(predicate: () -> Boolean, block: () -> Unit) {
+    if (!predicate()) {
+        block()
+    }
+}

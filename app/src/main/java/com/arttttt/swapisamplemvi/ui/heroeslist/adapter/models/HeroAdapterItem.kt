@@ -1,4 +1,4 @@
-package com.arttttt.swapisamplemvi.ui.heroeslist.adapter
+package com.arttttt.swapisamplemvi.ui.heroeslist.adapter.models
 
 import com.arttttt.swapisamplemvi.ui.base.recyclerview.IListItem
 

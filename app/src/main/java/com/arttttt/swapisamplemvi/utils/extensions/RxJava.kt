@@ -1,6 +1,7 @@
 package com.arttttt.swapisamplemvi.utils.extensions
 
 import io.reactivex.Observable
+import io.reactivex.ObservableSource
 import io.reactivex.subjects.PublishSubject
 
 fun<T> T?.toObservable(): Observable<T> {
@@ -13,4 +14,8 @@ fun<T> T?.toObservable(): Observable<T> {
 
 fun PublishSubject<Unit>.onNext() {
     onNext(Unit)
+}
+
+fun<T> ObservableSource<T>.wrap(): Observable<T> {
+    return Observable.wrap(this)
 }
