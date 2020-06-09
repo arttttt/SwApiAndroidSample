@@ -1,7 +1,7 @@
-package com.arttttt.swapisampleribs.container.rib.container.container.container
+package com.arttttt.swapisampleribs.container.rib.bottom_navigation
 
 import android.os.Parcelable
-import com.arttttt.swapisampleribs.container.rib.container.container.bottomNavigation.BottomNavigationBuilder
+import com.arttttt.swapisampleribs.container.rib.heroes_list.HeroesListBuilder
 import com.badoo.ribs.core.Router
 import com.badoo.ribs.core.builder.BuildParams
 import com.badoo.ribs.core.routing.RoutingSource
@@ -10,21 +10,21 @@ import com.badoo.ribs.core.routing.action.RoutingAction
 import com.badoo.ribs.core.routing.history.Routing
 import kotlinx.android.parcel.Parcelize
 
-class ContainerRouter(
+class BottomNavigationRouter(
     buildParams: BuildParams<Nothing?>,
     routingSource: RoutingSource<Configuration>,
-    private val mainBuilder: BottomNavigationBuilder
-): Router<ContainerRouter.Configuration>(
+    private val heroesListBuilder: HeroesListBuilder
+): Router<BottomNavigationRouter.Configuration>(
     buildParams = buildParams,
     routingSource = routingSource
 ) {
     sealed class Configuration: Parcelable {
-        @Parcelize object Main: Configuration()
+        @Parcelize object MoviesList: Configuration()
     }
 
     override fun resolve(routing: Routing<Configuration>): RoutingAction {
         return when (routing.configuration) {
-            is Configuration.Main -> attach(mainBuilder::build)
+            is Configuration.MoviesList -> attach(heroesListBuilder::build)
         }
     }
 }

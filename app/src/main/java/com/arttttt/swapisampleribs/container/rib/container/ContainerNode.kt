@@ -1,7 +1,8 @@
-package com.arttttt.swapisampleribs.container.rib.container.container.container
+package com.arttttt.swapisampleribs.container.rib.container
 
-import com.arttttt.swapisampleribs.container.rib.container.container.container.Container.Input
-import com.arttttt.swapisampleribs.container.rib.container.container.container.Container.Output
+import com.arttttt.swapisampleribs.container.rib.container.Container
+import com.arttttt.swapisampleribs.container.rib.container.Container.Input
+import com.arttttt.swapisampleribs.container.rib.container.Container.Output
 import com.badoo.ribs.clienthelper.Connectable
 import com.badoo.ribs.clienthelper.NodeConnector
 import com.badoo.ribs.core.Node
@@ -16,6 +17,4 @@ class ContainerNode internal constructor(
     buildParams = buildParams,
     viewFactory = null,
     plugins = plugins
-), Container, Connectable<Input, Output> by connector {
-
-}
+), Container, Connectable<Input, Output> by connector {}

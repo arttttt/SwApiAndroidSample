@@ -1,4 +1,4 @@
-package com.arttttt.swapisampleribs.container.rib.container.container.container
+package com.arttttt.swapisampleribs.container.rib.container
 
 import com.badoo.ribs.core.BackStackInteractor
 import com.badoo.ribs.core.builder.BuildParams

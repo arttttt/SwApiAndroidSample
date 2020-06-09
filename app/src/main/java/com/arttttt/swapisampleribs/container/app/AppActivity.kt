@@ -3,8 +3,8 @@ package com.arttttt.swapisampleribs.container.app
 import android.os.Bundle
 import android.view.ViewGroup
 import com.arttttt.swapisampleribs.R
-import com.arttttt.swapisampleribs.container.rib.container.container.container.Container
-import com.arttttt.swapisampleribs.container.rib.container.container.container.ContainerBuilder
+import com.arttttt.swapisampleribs.container.rib.container.Container
+import com.arttttt.swapisampleribs.container.rib.container.ContainerBuilder
 import com.badoo.ribs.android.RibActivity
 import com.badoo.ribs.core.Rib
 import com.badoo.ribs.core.builder.BuildContext
@@ -21,7 +21,7 @@ class AppActivity: RibActivity() {
 
     override fun createRib(savedInstanceState: Bundle?): Rib {
         return ContainerBuilder(
-            object: Container.Dependency {}
+            object : Container.Dependency {}
         ).build(BuildContext.root(savedInstanceState))
     }
 }

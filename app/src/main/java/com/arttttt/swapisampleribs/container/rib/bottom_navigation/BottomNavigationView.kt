@@ -1,13 +1,14 @@
-package com.arttttt.swapisampleribs.container.rib.container.container.bottomNavigation
+package com.arttttt.swapisampleribs.container.rib.bottom_navigation
 
+import android.view.Menu
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import com.badoo.ribs.core.view.RibView
 import com.badoo.ribs.core.view.ViewFactory
 import com.badoo.ribs.customisation.inflate
 import com.arttttt.swapisampleribs.R
-import com.arttttt.swapisampleribs.container.rib.container.container.bottomNavigation.BottomNavigationView.Event
-import com.arttttt.swapisampleribs.container.rib.container.container.bottomNavigation.BottomNavigationView.ViewModel
+import com.arttttt.swapisampleribs.container.rib.bottom_navigation.BottomNavigationView.Event
+import com.arttttt.swapisampleribs.container.rib.bottom_navigation.BottomNavigationView.ViewModel
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.ObservableSource
 import io.reactivex.functions.Consumer
@@ -46,9 +47,9 @@ class BottomNavigationViewImpl private constructor(
     private val bottomNavigation = androidView.findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottomNavigation)
 
     init {
-        (0 until 5).forEach { i ->
-            bottomNavigation.menu.add(i.toString())
-        }
+        //todo: move to resources
+        bottomNavigation.menu.add(0, 0, Menu.NONE, "Heroes")
+        bottomNavigation.menu.add(0, 1, Menu.NONE, "Movies")
     }
 
     override fun accept(vm: BottomNavigationView.ViewModel) {
