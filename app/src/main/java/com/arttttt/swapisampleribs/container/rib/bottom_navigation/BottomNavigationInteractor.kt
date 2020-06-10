@@ -7,5 +7,5 @@ class BottomNavigationInteractor(
     buildParams: BuildParams<Nothing?>
 ): BackStackInteractor<BottomNavigation, BottomNavigationView, BottomNavigationRouter.Configuration>(
     buildParams = buildParams,
-    initialConfiguration = BottomNavigationRouter.Configuration.MoviesList
+    initialConfiguration = BottomNavigationRouter.Configuration.HeroesList
 )

@@ -2,6 +2,8 @@ package com.arttttt.swapisampleribs.container.rib.bottom_navigation
 
 import com.arttttt.swapisampleribs.container.rib.heroes_list.HeroesList
 import com.arttttt.swapisampleribs.container.rib.heroes_list.HeroesListBuilder
+import com.arttttt.swapisampleribs.container.rib.movies_list.MoviesList
+import com.arttttt.swapisampleribs.container.rib.movies_list.MoviesListBuilder
 import com.badoo.ribs.core.builder.BuildParams
 import com.badoo.ribs.core.builder.SimpleBuilder
 
@@ -21,7 +23,10 @@ class BottomNavigationBuilder(
                 buildParams = buildParams,
                 routingSource = interactor,
                 heroesListBuilder = HeroesListBuilder(
-                    object: HeroesList.Dependency {}
+                    dependency = object: HeroesList.Dependency {}
+                ),
+                moviesListBuilder = MoviesListBuilder(
+                    dependency = object: MoviesList.Dependency {}
                 )
             )
         )

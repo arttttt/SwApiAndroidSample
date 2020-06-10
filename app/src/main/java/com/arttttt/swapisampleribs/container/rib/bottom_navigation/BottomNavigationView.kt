@@ -50,8 +50,12 @@ class BottomNavigationViewImpl private constructor(
 
     init {
         //todo: move to resources
-        bottomNavigation.menu.add(0, 0, Menu.NONE, "Heroes")
-        bottomNavigation.menu.add(0, 1, Menu.NONE, "Movies")
+        bottomNavigation.menu.add(0, 0, Menu.NONE, "Heroes").apply {
+            setIcon(R.drawable.ic_hero)
+        }
+        bottomNavigation.menu.add(0, 1, Menu.NONE, "Movies").apply {
+            setIcon(R.drawable.ic_movie)
+        }
     }
 
     override fun accept(vm: BottomNavigationView.ViewModel) {
