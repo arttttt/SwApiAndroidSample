@@ -18,7 +18,9 @@ interface BottomNavigationView : RibView,
     ObservableSource<Event>,
     Consumer<ViewModel> {
 
-    sealed class Event
+    sealed class Event {
+        class BottomTabSelected(val id: Int): Event()
+    }
 
     data class ViewModel(
         val i: Int = 0
@@ -55,6 +57,11 @@ class BottomNavigationViewImpl private constructor(
         }
         bottomNavigation.menu.add(0, 1, Menu.NONE, "Movies").apply {
             setIcon(R.drawable.ic_movie)
+        }
+
+        bottomNavigation.setOnNavigationItemSelectedListener { menuItem ->
+            events.accept(Event.BottomTabSelected(menuItem.itemId))
+            true
         }
     }
 
