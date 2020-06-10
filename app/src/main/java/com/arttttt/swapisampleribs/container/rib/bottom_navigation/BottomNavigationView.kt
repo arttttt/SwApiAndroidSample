@@ -9,6 +9,7 @@ import com.badoo.ribs.customisation.inflate
 import com.arttttt.swapisampleribs.R
 import com.arttttt.swapisampleribs.container.rib.bottom_navigation.BottomNavigationView.Event
 import com.arttttt.swapisampleribs.container.rib.bottom_navigation.BottomNavigationView.ViewModel
+import com.badoo.ribs.core.Node
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.ObservableSource
 import io.reactivex.functions.Consumer
@@ -44,6 +45,7 @@ class BottomNavigationViewImpl private constructor(
         }
     }
 
+    private val content = androidView.findViewById<ViewGroup>(R.id.content)
     private val bottomNavigation = androidView.findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottomNavigation)
 
     init {
@@ -53,5 +55,9 @@ class BottomNavigationViewImpl private constructor(
     }
 
     override fun accept(vm: BottomNavigationView.ViewModel) {
+    }
+
+    override fun getParentViewForChild(child: Node<*>): ViewGroup? {
+        return content
     }
 }
