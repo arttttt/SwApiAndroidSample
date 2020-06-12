@@ -1,5 +1,6 @@
 package com.arttttt.swapisampleribs.rib.bottom_navigation.builder
 
+import com.arttttt.swapisampleribs.extensions.closeOnNodeDetachPlugin
 import com.arttttt.swapisampleribs.rib.KoinAwareSimpleBuilder
 import com.arttttt.swapisampleribs.rib.bottom_navigation.BottomNavigation
 import com.arttttt.swapisampleribs.rib.bottom_navigation.BottomNavigationInteractor
@@ -37,7 +38,8 @@ class BottomNavigationBuilder(
                         dependency = object : MoviesList.Dependency {}
                     )
                 ),
-                scope.get<BottomNavigationInteractor> { parametersOf(buildParams) }
+                scope.get<BottomNavigationInteractor> { parametersOf(buildParams) },
+                scope.closeOnNodeDetachPlugin
             )
         )
     }
