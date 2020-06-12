@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'koin'
 
 android {
     compileSdkVersion 29
@@ -56,6 +57,13 @@ dependencies {
     implementation('com.github.ihsanbal:LoggingInterceptor:3.0.0') {
         exclude group: 'org.json', module: 'json'
     }
+
+    implementation "com.hannesdorfmann:adapterdelegates4:4.2.0"
+    implementation "com.hannesdorfmann:adapterdelegates4-kotlin-dsl-layoutcontainer:4.2.0"
+
+    implementation "org.koin:koin-core:$koin_version"
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-androidx-scope:$koin_version"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

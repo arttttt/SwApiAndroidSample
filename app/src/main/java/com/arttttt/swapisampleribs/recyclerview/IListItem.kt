@@ -1,0 +1,3 @@
+package com.arttttt.swapisampleribs.recyclerview
+
+interface IListItem
