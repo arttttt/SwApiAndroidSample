@@ -5,6 +5,8 @@ import com.badoo.ribs.core.Rib
 import com.badoo.ribs.customisation.RibCustomisation
 import com.arttttt.swapisampleribs.rib.movies_list.MoviesList.Input
 import com.arttttt.swapisampleribs.rib.movies_list.MoviesList.Output
+import com.arttttt.swapisampleribs.rib.movies_list.view.MoviesListView
+import com.arttttt.swapisampleribs.rib.movies_list.view.MoviesListViewImpl
 
 interface MoviesList : Rib, Connectable<Input, Output> {
 

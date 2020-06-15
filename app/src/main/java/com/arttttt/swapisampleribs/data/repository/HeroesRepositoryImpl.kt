@@ -10,7 +10,7 @@ class HeroesRepositoryImpl(
 ): HeroesRepository {
     override fun loadHeroes(): Single<List<Hero>> {
         return swApi
-            .searchHero(1)
+            .loadHeroes(null)
             .map { response ->
                 response
                     .results

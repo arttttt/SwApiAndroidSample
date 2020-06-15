@@ -3,6 +3,7 @@ package com.arttttt.swapisampleribs.rib.movies_list.builder
 import com.arttttt.swapisampleribs.extensions.closeOnNodeDetachPlugin
 import com.arttttt.swapisampleribs.rib.KoinAwareSimpleBuilder
 import com.arttttt.swapisampleribs.rib.movies_list.MoviesList
+import com.arttttt.swapisampleribs.rib.movies_list.MoviesListInteractor
 import com.arttttt.swapisampleribs.rib.movies_list.MoviesListNode
 import com.badoo.ribs.core.builder.BuildParams
 import org.koin.core.parameter.parametersOf
@@ -26,6 +27,7 @@ class MoviesListBuilder(
                 )
             }.viewFactory(null),
             plugins = listOf(
+                scope.get<MoviesListInteractor> { parametersOf(buildParams) },
                 scope.closeOnNodeDetachPlugin
             )
         )

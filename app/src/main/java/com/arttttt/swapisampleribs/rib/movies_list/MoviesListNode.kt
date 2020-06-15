@@ -8,6 +8,7 @@ import com.badoo.ribs.core.builder.BuildParams
 import com.badoo.ribs.core.plugin.Plugin
 import com.arttttt.swapisampleribs.rib.movies_list.MoviesList.Input
 import com.arttttt.swapisampleribs.rib.movies_list.MoviesList.Output
+import com.arttttt.swapisampleribs.rib.movies_list.view.MoviesListView
 
 class MoviesListNode internal constructor(
     buildParams: BuildParams<*>,

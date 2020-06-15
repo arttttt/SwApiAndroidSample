@@ -1,13 +1,18 @@
-package com.arttttt.swapisampleribs.rib.movies_list
+package com.arttttt.swapisampleribs.rib.movies_list.view
 
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.arttttt.swapisampleribs.R
+import com.arttttt.swapisampleribs.recyclerview.IListItem
+import com.arttttt.swapisampleribs.rib.movies_list.view.MoviesListView.Event
+import com.arttttt.swapisampleribs.rib.movies_list.view.MoviesListView.ViewModel
+import com.arttttt.swapisampleribs.rib.movies_list.view.adapter.delegates.MovieAdapterDelegate
 import com.badoo.ribs.core.view.RibView
 import com.badoo.ribs.core.view.ViewFactory
 import com.badoo.ribs.customisation.inflate
-import com.arttttt.swapisampleribs.R
-import com.arttttt.swapisampleribs.rib.movies_list.MoviesListView.Event
-import com.arttttt.swapisampleribs.rib.movies_list.MoviesListView.ViewModel
+import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.ObservableSource
 import io.reactivex.functions.Consumer
@@ -19,7 +24,7 @@ interface MoviesListView : RibView,
     sealed class Event
 
     data class ViewModel(
-        val i: Int = 0
+        val items: List<IListItem>
     )
 
     interface Factory : ViewFactory<Nothing?, MoviesListView>
@@ -43,6 +48,19 @@ class MoviesListViewImpl private constructor(
         }
     }
 
-    override fun accept(vm: MoviesListView.ViewModel) {
+    private val recyclerView = androidView.findViewById<RecyclerView>(R.id.recyclerView)
+
+    private val adapter = ListDelegationAdapter(
+        MovieAdapterDelegate()
+    )
+
+    init {
+        recyclerView.layoutManager = LinearLayoutManager(androidView.context, LinearLayoutManager.VERTICAL, false)
+        recyclerView.adapter = adapter
+    }
+
+    override fun accept(vm: ViewModel) {
+        adapter.items = vm.items
+        adapter.notifyDataSetChanged()
     }
 }

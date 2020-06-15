@@ -1,4 +1,4 @@
-package com.arttttt.swapisampleribs.data.network.model
+package com.arttttt.swapisampleribs.data.network.model.heroes
 
 import com.google.gson.annotations.SerializedName
 
