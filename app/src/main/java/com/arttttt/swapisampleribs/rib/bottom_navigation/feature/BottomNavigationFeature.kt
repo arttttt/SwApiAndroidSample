@@ -1,11 +1,17 @@
-package com.arttttt.swapisampleribs.rib
+package com.arttttt.swapisampleribs.rib.bottom_navigation.feature
 
+import android.os.Bundle
 import android.os.Parcelable
 import com.arttttt.swapisampleribs.extensions.toObservable
+import com.arttttt.swapisampleribs.rib.bottom_navigation.feature.operations.InitBottomTabs
+import com.arttttt.swapisampleribs.rib.bottom_navigation.feature.operations.MoveToFront
+import com.badoo.mvicore.android.AndroidTimeCapsule
 import com.badoo.mvicore.element.Actor
 import com.badoo.mvicore.element.Bootstrapper
 import com.badoo.mvicore.element.Reducer
+import com.badoo.mvicore.element.TimeCapsule
 import com.badoo.mvicore.feature.ActorReducerFeature
+import com.badoo.ribs.core.builder.BuildParams
 import com.badoo.ribs.core.routing.RoutingSource
 import com.badoo.ribs.core.routing.history.Routing
 import com.badoo.ribs.core.routing.history.RoutingHistory
@@ -13,55 +19,46 @@ import com.badoo.ribs.core.routing.history.RoutingHistoryElement
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.functions.Consumer
-import kotlinx.android.parcel.Parcelize
 
-typealias BottomTabs<C> = Set<RoutingHistoryElement<C>>
+private val timeCapsuleKey = BottomNavigationFeature::class.java.name
+private fun <C : Parcelable> TimeCapsule<BottomNavigationFeatureState<C>>.initialState(): BottomNavigationFeatureState<C> =
+    (get(timeCapsuleKey) ?: BottomNavigationFeatureState())
 
-interface BottomTabOperation<C : Parcelable> : (BottomTabs<C>) -> BottomTabs<C>
+//todo: refactoring
+class BottomNavigationFeature<C : Parcelable> internal constructor(
+    tabs: Set<C>,
+    private val timeCapsule: AndroidTimeCapsule
+): Consumer<BottomNavigationFeature.Operation<C>>, RoutingSource<C> {
 
-private class InitBottomTabs<C : Parcelable>(
-    private val configurations: Set<C>
-): BottomTabOperation<C> {
+    constructor(
+        tabs: Set<C>,
+        buildParams: BuildParams<*>
+    ) : this(
+        tabs,
+        AndroidTimeCapsule(buildParams.savedInstanceState)
+    )
 
-    override fun invoke(tabs: BottomTabs<C>): BottomTabs<C> {
-        return configurations
-            .map { configuration -> RoutingHistoryElement(Routing(configuration)) }
-            .toSet()
+    init {
+        timeCapsule.register(timeCapsuleKey) { feature.state }
     }
-}
-
-private class MoveToFront<C: Parcelable>(
-    val configuration: C
-): BottomTabOperation<C> {
-    override fun invoke(tabs: BottomTabs<C>): BottomTabs<C> {
-        return tabs
-    }
-}
-
-@Parcelize
-data class BottomNavigationFeatureState<C : Parcelable>(
-    val bottomTabs: BottomTabs<C> = emptySet()
-) : Parcelable, RoutingHistory<C> {
-
-    override fun iterator(): Iterator<RoutingHistoryElement<C>> {
-        return bottomTabs.iterator()
-    }
-}
-
-class TestFeature<C : Parcelable>(
-    tabs: Set<C>
-): Consumer<TestFeature.Operation<C>>, RoutingSource<C> {
 
     private val feature = ActorReducerFeature<Operation<C>, Effect<C>, BottomNavigationFeatureState<C>, Nothing>(
-        initialState = BottomNavigationFeatureState(),
+        initialState = timeCapsule.initialState(),
         actor = object: Actor<BottomNavigationFeatureState<C>, Operation<C>, Effect<C>> {
             override fun invoke(state: BottomNavigationFeatureState<C>, op: Operation<C>): Observable<out Effect<C>> {
-                return Effect.Applied(state, op.bottomTabOperation).toObservable()
+                return Effect.Applied(
+                    state,
+                    op.bottomTabOperation
+                ).toObservable()
             }
         },
         bootstrapper = object: Bootstrapper<Operation<C>> {
             override fun invoke(): Observable<Operation<C>> {
-                return Operation(InitBottomTabs(tabs)).toObservable()
+                return Operation(
+                    InitBottomTabs(
+                        tabs
+                    )
+                ).toObservable()
             }
         },
         newsPublisher = null,
@@ -133,7 +130,7 @@ class TestFeature<C : Parcelable>(
     }
 
     override fun baseLineState(fromRestored: Boolean): RoutingHistory<C> {
-        return BottomNavigationFeatureState()
+        return timeCapsule.initialState()
     }
 
     override fun remove(identifier: Routing.Identifier) {}
@@ -142,7 +139,18 @@ class TestFeature<C : Parcelable>(
         feature.subscribe(observer)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        timeCapsule.saveState(outState)
+    }
+
     fun moveToFront(configuration: C) {
-        feature.accept(Operation(MoveToFront(configuration)))
+        feature.accept(
+            Operation(
+                MoveToFront(
+                    configuration
+                )
+            )
+        )
     }
 }
