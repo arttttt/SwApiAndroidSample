@@ -21,7 +21,9 @@ interface HeroesListView : RibView,
     ObservableSource<Event>,
     Consumer<ViewModel> {
 
-    sealed class Event
+    sealed class Event {
+        object HeroClicked: Event()
+    }
 
     data class ViewModel(
         val items: List<IListItem>
@@ -51,7 +53,9 @@ class HeroesListViewImpl private constructor(
     private val recyclerView = androidView.findViewById<RecyclerView>(R.id.recyclerView)
 
     private val adapter = ListDelegationAdapter(
-        HeroAdapterDelegate()
+        HeroAdapterDelegate(
+            onClick = { events.accept(Event.HeroClicked) }
+        )
     )
 
     init {

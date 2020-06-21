@@ -6,7 +6,6 @@ import com.arttttt.swapisampleribs.rib.bottom_navigation.BottomNavigation
 import com.arttttt.swapisampleribs.rib.bottom_navigation.BottomNavigationInteractor
 import com.arttttt.swapisampleribs.rib.bottom_navigation.BottomNavigationNode
 import com.arttttt.swapisampleribs.rib.bottom_navigation.BottomNavigationRouter
-import com.arttttt.swapisampleribs.rib.heroes_list.HeroesList
 import com.arttttt.swapisampleribs.rib.heroes_list.builder.HeroesListBuilder
 import com.arttttt.swapisampleribs.rib.movies_list.MoviesList
 import com.arttttt.swapisampleribs.rib.movies_list.builder.MoviesListBuilder
@@ -32,7 +31,7 @@ class BottomNavigationBuilder(
                     buildParams = buildParams,
                     routingSource = scope.get<BottomNavigationInteractor> { parametersOf(buildParams) },
                     heroesListBuilder = HeroesListBuilder(
-                        dependency = object : HeroesList.Dependency {}
+                        dependency = dependency
                     ),
                     moviesListBuilder = MoviesListBuilder(
                         dependency = object : MoviesList.Dependency {}

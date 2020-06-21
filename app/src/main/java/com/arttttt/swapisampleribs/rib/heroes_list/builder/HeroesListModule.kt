@@ -17,7 +17,8 @@ val heroesListModule = module {
         scoped { (buildParams: BuildParams<*>) ->
             HeroesListInteractor(
                 buildParams = buildParams,
-                feature = get()
+                feature = get(),
+                output = get<HeroesList.Dependency>().output()
             )
         }
 

@@ -6,7 +6,11 @@ import com.arttttt.swapisampleribs.rib.heroes_list.view.adapter.models.HeroAdapt
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateLayoutContainer
 import kotlinx.android.synthetic.main.item_hero.*
 
-fun HeroAdapterDelegate() = adapterDelegateLayoutContainer<HeroAdapterItem, IListItem>(R.layout.item_hero) {
+fun HeroAdapterDelegate(
+    onClick: () -> Unit
+) = adapterDelegateLayoutContainer<HeroAdapterItem, IListItem>(R.layout.item_hero) {
+
+    itemView.setOnClickListener { onClick() }
 
     bind {
         tvHeroName.text = item.name

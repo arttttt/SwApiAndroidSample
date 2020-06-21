@@ -10,10 +10,12 @@ import com.badoo.mvicore.android.lifecycle.createDestroy
 import com.badoo.mvicore.binder.using
 import com.badoo.ribs.core.Interactor
 import com.badoo.ribs.core.builder.BuildParams
+import io.reactivex.functions.Consumer
 
 internal class HeroesListInteractor(
     buildParams: BuildParams<*>,
-    private val feature: HeroesListFeature
+    private val feature: HeroesListFeature,
+    private val output: Consumer<HeroesList.Output>
 ) : Interactor<HeroesList, HeroesListView>(
     buildParams = buildParams,
     disposables = feature
@@ -23,6 +25,12 @@ internal class HeroesListInteractor(
         nodeLifecycle.createDestroy {
             bind(feature.news to rib.output using NewsToOutput)
             bind(rib.input to feature using InputToWish)
+        }
+    }
+
+    private val viewEventToOutput = { event: HeroesListView.Event ->
+        when (event) {
+            is HeroesListView.Event.HeroClicked -> HeroesList.Output.HeroClicked
         }
     }
 
@@ -37,6 +45,8 @@ internal class HeroesListInteractor(
                     }
                 )
             })
+
+            bind(view to output using viewEventToOutput)
         }
     }
 }

@@ -11,8 +11,12 @@ import org.koin.core.qualifier.Qualifier
 import org.koin.core.qualifier.qualifier
 
 class HeroesListBuilder(
-    private val dependency: HeroesList.Dependency
+    dependency: HeroesList.Dependency
 ) : KoinAwareSimpleBuilder<HeroesList>() {
+
+    init {
+        scope.declare(dependency)
+    }
 
     override fun getScopeQualifier(): Qualifier {
         return qualifier<HeroesList>()
