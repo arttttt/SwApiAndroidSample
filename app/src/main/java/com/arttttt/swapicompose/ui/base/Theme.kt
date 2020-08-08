@@ -1,4 +1,4 @@
-package com.arttttt.swapicompose.ui
+package com.arttttt.swapicompose.ui.base
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

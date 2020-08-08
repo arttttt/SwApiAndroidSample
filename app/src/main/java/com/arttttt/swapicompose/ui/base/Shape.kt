@@ -1,4 +1,4 @@
-package com.arttttt.swapicompose.ui
+package com.arttttt.swapicompose.ui.base
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

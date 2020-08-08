@@ -1,4 +1,4 @@
-package com.arttttt.swapicompose.ui
+package com.arttttt.swapicompose.ui.base
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
