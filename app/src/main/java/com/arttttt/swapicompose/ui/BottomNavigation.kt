@@ -13,18 +13,16 @@ enum class Tab(val title: String) {
 }
 
 @Composable
-fun AppBottomNavigation(defaultTab: Tab = Tab.HEROES) {
-    val selectedTab = state { defaultTab }
-
+fun AppBottomNavigation(currentTab: Tab = Tab.HEROES, onTabSelected: (Tab) -> Unit) {
     BottomNavigation {
         enumValues<Tab>().forEach { tab ->
             BottomNavigationItem(
                     icon = {},
                     label = { Text(text = tab.title) },
-                    selected = selectedTab.value == tab,
+                    selected = currentTab == tab,
                     selectedContentColor = Color.Red,
                     unselectedContentColor = Color.Black,
-                    onSelect = { selectedTab.value = tab }
+                    onSelect = { onTabSelected.invoke(tab) }
             )
         }
     }
