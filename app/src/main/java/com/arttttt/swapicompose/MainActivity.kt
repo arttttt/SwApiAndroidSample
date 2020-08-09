@@ -4,29 +4,22 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope.weight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumnForIndexed
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.state
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.arttttt.swapicompose.domain.feature.heroesfeature.HeroesFeature
 import com.arttttt.swapicompose.ui.AppBottomNavigation
 import com.arttttt.swapicompose.ui.Tab
 import com.arttttt.swapicompose.ui.base.SwApiComposeTheme
-import com.arttttt.swapicompose.ui.screens.HeroesListScreen
-import com.arttttt.swapicompose.ui.screens.MoviesListScreen
+import com.arttttt.swapicompose.ui.screens.heroeslist.HeroesListScreen
+import com.arttttt.swapicompose.ui.screens.movieslist.MoviesListScreen
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {

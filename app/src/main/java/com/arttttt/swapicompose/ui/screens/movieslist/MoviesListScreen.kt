@@ -1,4 +1,4 @@
-package com.arttttt.swapicompose.ui.screens
+package com.arttttt.swapicompose.ui.screens.movieslist
 
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.Text

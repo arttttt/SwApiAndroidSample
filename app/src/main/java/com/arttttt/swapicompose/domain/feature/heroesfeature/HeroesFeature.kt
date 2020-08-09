@@ -12,6 +12,7 @@ import com.badoo.mvicore.element.*
 import com.badoo.mvicore.feature.BaseFeature
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import java.util.concurrent.TimeUnit
 
 class HeroesFeature(
     swRepository: SwRepository
@@ -99,6 +100,7 @@ class HeroesFeature(
             return swRepository
                 .getHeroesPage(page)
                 .map<Effect>(Effect::HeroesIsLoaded)
+                .delay(1000, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .startWith(initialEffect)
         }
