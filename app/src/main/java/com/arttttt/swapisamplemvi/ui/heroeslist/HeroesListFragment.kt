@@ -7,9 +7,9 @@ import com.arttttt.swapisamplemvi.ui.base.BaseBindings
 import com.arttttt.swapisamplemvi.ui.base.BaseFragment
 import com.arttttt.swapisamplemvi.ui.base.UiAction
 import com.arttttt.swapisamplemvi.ui.base.UiActionsDelegate
-import com.arttttt.swapisamplemvi.ui.base.recyclerview.DefaultDiffCallback
 import com.arttttt.swapisamplemvi.ui.base.recyclerview.IListItem
 import com.arttttt.swapisamplemvi.ui.base.recyclerview.ListDifferAdapter
+import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroesListDiffCallback
 import com.arttttt.swapisamplemvi.ui.heroeslist.di.DaggerHeroesListComponent
 import com.arttttt.swapisamplemvi.utils.extensions.toObservable
 import com.badoo.mvicore.ModelWatcher
@@ -54,7 +54,7 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.Action, HeroesListFrag
 
     private val adapter by lazy {
         ListDifferAdapter(
-            diffCallback = DefaultDiffCallback(),
+            diffCallback = HeroesListDiffCallback(),
             delegates = delegatesProvider.get()
         )
     }
