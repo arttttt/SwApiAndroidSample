@@ -11,6 +11,7 @@ import com.arttttt.swapisamplemvi.ui.base.UiActionsDelegate
 import com.arttttt.swapisamplemvi.ui.herodetails.di.DaggerHeroDetailsComponent
 import com.arttttt.swapisamplemvi.utils.extensions.toObservable
 import com.badoo.mvicore.ModelWatcher
+import com.badoo.mvicore.android.AndroidTimeCapsule
 import com.badoo.mvicore.modelWatcher
 import kotlinx.android.synthetic.main.fragment_hero_details.*
 import javax.inject.Inject
@@ -38,6 +39,8 @@ class HeroDetailsFragment: BaseFragment<HeroDetailsFragment.Action, HeroDetailsF
 
     @Inject
     lateinit var bindingsProvider: Provider<HeroDetailsBindings>
+
+    override val timeCapsule = AndroidTimeCapsule(null)
 
     override fun provideBindings(): BaseBindings<out BaseFragment<Action, ViewModel>> {
         return bindingsProvider.get()

@@ -13,6 +13,7 @@ import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.HeroesListDiffCallback
 import com.arttttt.swapisamplemvi.ui.heroeslist.di.DaggerHeroesListComponent
 import com.arttttt.swapisamplemvi.utils.extensions.toObservable
 import com.badoo.mvicore.ModelWatcher
+import com.badoo.mvicore.android.AndroidTimeCapsule
 import com.badoo.mvicore.byValue
 import com.badoo.mvicore.modelWatcher
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
@@ -52,6 +53,8 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.Action, HeroesListFrag
         return uiActionsProvider.get()
     }
 
+    override lateinit var timeCapsule: AndroidTimeCapsule
+
     private val adapter by lazy {
         ListDifferAdapter(
             diffCallback = HeroesListDiffCallback(),
@@ -60,7 +63,11 @@ class HeroesListFragment: BaseFragment<HeroesListFragment.Action, HeroesListFrag
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        DaggerHeroesListComponent.factory().create((requireActivity() as AppActivity).component).inject(this)
+        timeCapsule = AndroidTimeCapsule(savedInstanceState)
+        DaggerHeroesListComponent.factory().create(
+            dependencies = (requireActivity() as AppActivity).component,
+            timeCapsule = timeCapsule
+        ).inject(this)
         super.onCreate(savedInstanceState)
     }
 

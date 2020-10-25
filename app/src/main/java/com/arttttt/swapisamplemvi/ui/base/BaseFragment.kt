@@ -9,6 +9,7 @@ import com.arttttt.swapisamplemvi.ui.base.lifecycle.SimpleFragmentLifecycle
 import com.arttttt.swapisamplemvi.ui.base.lifecycle.SimpleFragmentLifecycleOwner
 import com.arttttt.swapisamplemvi.utils.extensions.unsafeCastTo
 import com.badoo.mvicore.ModelWatcher
+import com.badoo.mvicore.android.AndroidTimeCapsule
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -26,6 +27,8 @@ abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
 
     protected val binder: BaseBindings<BaseFragment<A, S>> by lazy { provideBindings().unsafeCastTo() }
     val uiActions: UiActionsDelegate<A> by lazy { provideUiActions() }
+
+    protected abstract val timeCapsule: AndroidTimeCapsule
 
     protected abstract fun provideBindings(): BaseBindings<out BaseFragment<A, S>>
     protected abstract fun provideUiActions(): UiActionsDelegate<A>
@@ -63,6 +66,11 @@ abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
         compositeDisposable.clear()
         watcher?.clear()
         watcher = null
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        timeCapsule.saveState(outState)
     }
 
     @CallSuper

@@ -1,5 +1,6 @@
 package com.arttttt.swapisamplemvi.domain.feature.heroesfeature
 
+import android.os.Bundle
 import com.arttttt.swapisamplemvi.domain.entity.Hero
 import com.arttttt.swapisamplemvi.domain.entity.Heroes
 import com.arttttt.swapisamplemvi.domain.feature.heroesfeature.HeroesFeature.*
@@ -8,15 +9,18 @@ import com.arttttt.swapisamplemvi.domain.feature.heroesfeature.HeroesFeature.Act
 import com.arttttt.swapisamplemvi.domain.feature.heroesfeature.HeroesFeature.Effect.*
 import com.arttttt.swapisamplemvi.domain.repository.SwRepository
 import com.arttttt.swapisamplemvi.utils.extensions.toObservable
+import com.badoo.mvicore.android.AndroidTimeCapsule
 import com.badoo.mvicore.element.*
 import com.badoo.mvicore.feature.BaseFeature
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import java.io.Serializable
 
 class HeroesFeature(
+    timeCapsule: AndroidTimeCapsule,
     swRepository: SwRepository
 ) : BaseFeature<Wish, Action, Effect, State, News>(
-    initialState = State(
+    initialState = timeCapsule.state() ?: State(
         currentPage = 1,
         isLoading = false,
         isLoadingMore = false,
@@ -24,12 +28,41 @@ class HeroesFeature(
         heroes = emptyList()
     ),
     wishToAction = { Execute(it) },
-    bootstrapper = BootStrapperImpl(),
+    bootstrapper = BootStrapperImpl(
+        initialState = timeCapsule.state() ?: State(
+            currentPage = 1,
+            isLoading = false,
+            isLoadingMore = false,
+            fullData = false,
+            heroes = emptyList()
+        )
+    ),
     actor = ActorImpl(swRepository),
     reducer = ReducerImpl(),
     postProcessor = PostProcessorImpl(),
     newsPublisher = NewsPublisherImpl()
 ) {
+
+    companion object {
+        private const val CAPSULE_KEY = "CAPSULE_KEY"
+        private const val STATE_KEY = "STATE_KEY"
+
+        private fun AndroidTimeCapsule.state() =
+            get<Bundle>(CAPSULE_KEY)?.getSerializable(STATE_KEY) as? State
+
+        private fun State.toParcelable() = Bundle().apply { putSerializable(STATE_KEY, this@toParcelable) }
+    }
+
+    init {
+        timeCapsule.register(CAPSULE_KEY) {
+            state
+                .copy(
+                    isLoading = false,
+                    isLoadingMore = false
+                )
+                .toParcelable()
+        }
+    }
 
     data class State(
         val currentPage: Int,
@@ -37,7 +70,7 @@ class HeroesFeature(
         val isLoading: Boolean,
         val isLoadingMore: Boolean,
         val heroes: List<Hero>
-    )
+    ) : Serializable
 
     sealed class Wish {
         object RefreshHeroes: Wish()
@@ -64,9 +97,15 @@ class HeroesFeature(
         class HeroSelected(val hero: Hero): News()
     }
 
-    class BootStrapperImpl : Bootstrapper<Action> {
+    class BootStrapperImpl(
+        private val initialState: State
+    ) : Bootstrapper<Action> {
         override fun invoke(): Observable<Action> {
-            return Action.LoadInitialData.toObservable()
+            return if (initialState.currentPage > 1) {
+                Observable.empty()
+            } else {
+                Action.LoadInitialData.toObservable()
+            }
         }
     }
 

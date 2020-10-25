@@ -7,6 +7,7 @@ import com.arttttt.swapisamplemvi.ui.common.ProgressAdapterDelegate
 import com.arttttt.swapisamplemvi.ui.heroeslist.HeroesListUiActionsDelegate
 import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.delegates.HeroAdapterDelegate
 import com.arttttt.swapisamplemvi.ui.heroeslist.adapter.delegates.HeroItemListener
+import com.badoo.mvicore.android.AndroidTimeCapsule
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
 import dagger.Binds
 import dagger.Module
@@ -39,8 +40,12 @@ object HeroesListModule {
     @JvmStatic
     @Provides
     @HeroesListScope
-    fun provideHeroesFeature(swRepository: SwRepository): HeroesFeature {
+    fun provideHeroesFeature(
+        timeCapsule: AndroidTimeCapsule,
+        swRepository: SwRepository
+    ): HeroesFeature {
         return HeroesFeature(
+            timeCapsule = timeCapsule,
             swRepository = swRepository
         )
     }
