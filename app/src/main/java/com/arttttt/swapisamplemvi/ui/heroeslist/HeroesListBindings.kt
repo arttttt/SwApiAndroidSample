@@ -4,10 +4,13 @@ import com.arttttt.swapisamplemvi.domain.feature.heroesfeature.HeroesFeature
 import com.arttttt.swapisamplemvi.domain.feature.herofeature.HeroFeature
 import com.arttttt.swapisamplemvi.ui.RootCoordinator
 import com.arttttt.swapisamplemvi.ui.base.BaseBindings
+import com.arttttt.swapisamplemvi.ui.heroeslist.di.HeroesListScope
 import com.arttttt.swapisamplemvi.ui.heroeslist.transfromer.HeroesListTransformer
 import com.badoo.mvicore.binder.using
+import javax.inject.Inject
 
-class HeroesListBindings(
+@HeroesListScope
+class HeroesListBindings @Inject constructor(
     private val transformer: HeroesListTransformer,
     private val coordinator: RootCoordinator,
     private val heroesFeature: HeroesFeature,

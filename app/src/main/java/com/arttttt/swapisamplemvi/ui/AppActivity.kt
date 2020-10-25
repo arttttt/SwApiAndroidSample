@@ -3,24 +3,34 @@ package com.arttttt.swapisamplemvi.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.arttttt.swapisamplemvi.App
 import com.arttttt.swapisamplemvi.R
 import com.arttttt.swapisamplemvi.Screens
+import com.arttttt.swapisamplemvi.di.components.DaggerUiComponent
+import com.arttttt.swapisamplemvi.di.components.UiComponent
 import com.arttttt.swapisamplemvi.ui.base.IBackHandler
 import com.arttttt.swapisamplemvi.utils.extensions.castTo
-import org.koin.android.ext.android.inject
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
+import javax.inject.Inject
 
 class AppActivity: AppCompatActivity() {
 
     private val navigator = object: SupportAppNavigator(this, R.id.rootContainer) {}
 
-    private val navHolder: NavigatorHolder by inject()
+    @Inject
+    lateinit var navHolder: NavigatorHolder
 
-    private val router: Router by inject()
+    @Inject
+    lateinit var router: Router
+
+    lateinit var component: UiComponent
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        component = DaggerUiComponent.factory().create((applicationContext as App).appComponent).apply {
+            inject(this@AppActivity)
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.app_activity)
 

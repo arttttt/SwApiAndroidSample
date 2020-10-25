@@ -7,6 +7,7 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import com.arttttt.swapisamplemvi.ui.base.lifecycle.SimpleFragmentLifecycle
 import com.arttttt.swapisamplemvi.ui.base.lifecycle.SimpleFragmentLifecycleOwner
+import com.arttttt.swapisamplemvi.utils.extensions.unsafeCastTo
 import com.badoo.mvicore.ModelWatcher
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -16,15 +17,18 @@ import io.reactivex.functions.Consumer
 abstract class BaseFragment<A: UiAction, S: ViewModel> private constructor(
     @LayoutRes layoutRes: Int,
     private val compositeDisposable: CompositeDisposable
-) : KoinFragment(layoutRes),
+) : Fragment(layoutRes),
     SimpleFragmentLifecycleOwner,
     Consumer<S>,
     IBackHandler
 {
     constructor(@LayoutRes layoutRes: Int): this(layoutRes, CompositeDisposable())
 
-    protected val binder by lazy { scope.get<BaseBindings<BaseFragment<A, S>>>() }
-    val uiActions by lazy { scope.get<UiActionsDelegate<A>>() }
+    protected val binder: BaseBindings<BaseFragment<A, S>> by lazy { provideBindings().unsafeCastTo() }
+    val uiActions: UiActionsDelegate<A> by lazy { provideUiActions() }
+
+    protected abstract fun provideBindings(): BaseBindings<out BaseFragment<A, S>>
+    protected abstract fun provideUiActions(): UiActionsDelegate<A>
 
     override var lifecycleListener: SimpleFragmentLifecycle? = null
 

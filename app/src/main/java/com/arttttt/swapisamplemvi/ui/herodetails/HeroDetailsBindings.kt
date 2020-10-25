@@ -3,9 +3,12 @@ package com.arttttt.swapisamplemvi.ui.herodetails
 import com.arttttt.swapisamplemvi.domain.feature.herofeature.HeroFeature
 import com.arttttt.swapisamplemvi.ui.RootCoordinator
 import com.arttttt.swapisamplemvi.ui.base.BaseBindings
+import com.arttttt.swapisamplemvi.ui.herodetails.di.HeroDetailScope
 import com.badoo.mvicore.binder.using
+import javax.inject.Inject
 
-class HeroDetailsBindings(
+@HeroDetailScope
+class HeroDetailsBindings @Inject constructor(
     private val rootCoordinator: RootCoordinator,
     private val heroFeature: HeroFeature
 ): BaseBindings<HeroDetailsFragment>() {
