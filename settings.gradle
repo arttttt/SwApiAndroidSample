@@ -1,0 +1,18 @@
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        jcenter() // Warning: this repository is going to shut down soon
+    }
+}
+rootProject.name = "MVIKotlinSample"
+include ':app'
+include ':moduleinjector'
+include ':feature:main'
+include ':core:dagger2'
+include ':feature:heroeslist'
+include ':core:navigation'
+include ':core:ui:recyclerview'
+include ':core:mvi'
+include ':feature:hero'
