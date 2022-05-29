@@ -1,0 +1,24 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "MVISampleCompose"
+include ':app'
+include ':core:mvi'
+include ':core:dagger2'
+include ':core:moduleinjector'
+include ':feature:main'
+include ':core:navigation'
+include ':feature:heroeslist'
+include ':feature:hero'
+include ':core:swapi'
