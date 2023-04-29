@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.defaultComponentContext
-import com.arttttt.app.root.RootComponentImpl
+import com.arttttt.root.root.RootComponentImpl
 
 class MainActivity : ComponentActivity() {
 

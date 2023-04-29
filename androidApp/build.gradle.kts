@@ -55,8 +55,13 @@ android {
 }
 
 dependencies {
-    implementation(project(":shared:app"))
+    implementation(project(":moduleinjector"))
+    implementation(project(":shared:root"))
     implementation(project(":shared:arch"))
+    implementation(project(":shared:heroeslist:api"))
+    implementation(project(":shared:heroeslist:impl"))
+    implementation(project(":shared:hero:api"))
+    implementation(project(":shared:hero:impl"))
 
     implementation(Dependencies.AndroidX.coreKtx)
 

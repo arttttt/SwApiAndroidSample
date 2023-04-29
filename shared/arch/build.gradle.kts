@@ -1,22 +1,15 @@
 plugins {
     kotlin("multiplatform")
-    id("com.android.library")
+}
+
+configureKMM()
+
+configureAndroid {
+    namespace = "com.arttttt.arch"
+    isComposeEnabled = true
 }
 
 kotlin {
-    android {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = JavaVersion.VERSION_17.toString()
-                freeCompilerArgs = listOf(
-                    "-Xcontext-receivers",
-                )
-            }
-        }
-    }
-
-    jvm()
-
 /*    listOf(
         iosX64(),
         iosArm64(),
@@ -46,6 +39,8 @@ kotlin {
                 api(Dependencies.Essenty.backHandler)
 
                 implementation(Dependencies.Coroutines.core)
+
+                implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
             }
         }
         val commonTest by getting
@@ -72,27 +67,5 @@ val iosX64Main by getting
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
         }*/
-    }
-}
-
-android {
-    namespace = "com.arttttt.arch"
-    compileSdk = 33
-
-    defaultConfig {
-        minSdk = 24
-    }
-
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = Dependencies.Compose.COMPILER_VERSION
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
     }
 }

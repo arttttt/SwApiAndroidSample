@@ -22,6 +22,10 @@ dependencyResolutionManagement {
     }
 }
 include(":shared:arch")
-//include(":shared2")
 include(":androidApp")
-include(":shared:app")
+include(":shared:root")
+include(":shared:heroeslist:api")
+include(":shared:heroeslist:impl")
+include(":moduleinjector")
+include(":shared:hero:api")
+include(":shared:hero:impl")
