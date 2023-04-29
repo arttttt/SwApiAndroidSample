@@ -1,9 +1,10 @@
-package com.arttttt.heroeslist.impl.ui
+package com.arttttt.heroeslist.impl.ui.list
 
 import com.arttttt.heroeslist.api.HeroesListComponent
 import kotlinx.coroutines.flow.Flow
 
-internal actual class HeroesListViewImpl actual constructor(component: HeroesListComponent) : HeroesListView {
+internal actual class HeroesListViewImpl actual constructor(component: HeroesListComponent) :
+    HeroesListView {
 
     override fun render(model: HeroesListView.Model) {
         TODO("Not yet implemented")

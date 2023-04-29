@@ -1,23 +1,25 @@
-package com.arttttt.heroeslist.impl
+package com.arttttt.heroeslist.impl.components.list
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.childContext
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
 import com.arkivanov.mvikotlin.extensions.coroutines.bind
 import com.arkivanov.mvikotlin.extensions.coroutines.states
 import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
-import com.arttttt.heroeslist.impl.data.repository.HeroesListRepositoryImpl
-import com.arttttt.heroeslist.impl.domain.store.HeroesListStore
-import com.arttttt.heroeslist.impl.domain.store.HeroesListStoreFactory
-import com.arttttt.heroeslist.impl.ui.HeroesListView
-import com.arttttt.heroeslist.impl.ui.HeroesListViewImpl
-import com.arttttt.heroeslist.impl.ui.models.ProgressListItem
-import com.arttttt.heroeslist.impl.ui.models.HeroListItem
 import com.arttttt.arch.events.EventsProducer
 import com.arttttt.arch.events.EventsProducerDelegate
 import com.arttttt.arch.view.ListItem
 import com.arttttt.arch.view.ViewOwner
 import com.arttttt.heroeslist.api.HeroesListComponent
+import com.arttttt.heroeslist.impl.components.toolbar.HeroesListToolbarComponentImpl
+import com.arttttt.heroeslist.impl.data.repository.HeroesListRepositoryImpl
+import com.arttttt.heroeslist.impl.domain.store.HeroesListStore
+import com.arttttt.heroeslist.impl.domain.store.HeroesListStoreFactory
+import com.arttttt.heroeslist.impl.ui.list.HeroesListView
+import com.arttttt.heroeslist.impl.ui.list.HeroesListViewImpl
+import com.arttttt.heroeslist.impl.ui.list.models.HeroListItem
+import com.arttttt.heroeslist.impl.ui.list.models.ProgressListItem
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNotNull
@@ -30,6 +32,12 @@ internal class HeroesListComponentImpl(
     HeroesListComponent,
     ViewOwner<HeroesListView>,
     EventsProducer<HeroesListComponent.Event> by eventsDelegate {
+
+    override val toolbarComponent = HeroesListToolbarComponentImpl(
+        componentContext = childContext(
+            key = "toolbar_component",
+        ),
+    )
 
     override val view: HeroesListView by ViewOwner.create { HeroesListViewImpl(this) }::view
 

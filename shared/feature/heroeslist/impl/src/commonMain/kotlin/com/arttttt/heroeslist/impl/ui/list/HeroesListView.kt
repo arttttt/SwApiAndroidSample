@@ -1,4 +1,4 @@
-package com.arttttt.heroeslist.impl.ui
+package com.arttttt.heroeslist.impl.ui.list
 
 import com.arttttt.arch.view.ComponentView
 import com.arttttt.arch.view.ListItem

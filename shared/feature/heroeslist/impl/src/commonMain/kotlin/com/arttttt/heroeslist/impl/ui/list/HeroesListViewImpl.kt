@@ -1,4 +1,4 @@
-package com.arttttt.heroeslist.impl.ui
+package com.arttttt.heroeslist.impl.ui.list
 
 import com.arttttt.heroeslist.api.HeroesListComponent
 

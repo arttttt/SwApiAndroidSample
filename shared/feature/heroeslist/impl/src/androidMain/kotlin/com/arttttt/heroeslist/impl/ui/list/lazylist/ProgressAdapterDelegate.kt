@@ -1,11 +1,11 @@
-package com.arttttt.heroeslist.impl.ui.lazylist
+package com.arttttt.heroeslist.impl.ui.list.lazylist
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.arttttt.arch.view.lazylist.dsl.lazyListDelegate
-import com.arttttt.heroeslist.impl.ui.models.ProgressListItem
+import com.arttttt.heroeslist.impl.ui.list.models.ProgressListItem
 
 internal fun ProgressAdapterDelegate() = lazyListDelegate<ProgressListItem>(
     key = { item -> item::class.qualifiedName!! }

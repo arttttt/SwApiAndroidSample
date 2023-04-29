@@ -1,4 +1,4 @@
-package com.arttttt.heroeslist.impl.ui.lazylist
+package com.arttttt.heroeslist.impl.ui.list.lazylist
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
@@ -6,7 +6,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arttttt.arch.view.lazylist.dsl.lazyListDelegate
-import com.arttttt.heroeslist.impl.ui.models.HeroListItem
+import com.arttttt.heroeslist.impl.ui.list.models.HeroListItem
 
 internal fun HeroLazyListDelegate(
     onClick: (String) -> Unit,
