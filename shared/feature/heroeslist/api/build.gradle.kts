@@ -1,14 +1,14 @@
 plugins {
     kotlin("multiplatform")
-}
-
-configureAndroid {
-    namespace = "com.arttttt.hero.impl"
-    isComposeEnabled = true
-    isParcelizeEnabled = true
+    id("com.android.library")
 }
 
 configureKMM()
+
+configureAndroid {
+    namespace = "com.arttttt.heroeslist.api"
+    isParcelizeEnabled = true
+}
 
 kotlin {
     /*listOf(
@@ -17,19 +17,15 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "impl"
+            baseName = "api"
         }
     }*/
 
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":moduleinjector"))
-                implementation(project(":shared:arch"))
-                implementation(project(":shared:heroeslist:api"))
-                implementation(project(":shared:hero:api"))
-
-                implementation(Dependencies.Coroutines.core)
+                implementation(project(":shared:core:arch"))
+                implementation(project(":shared:core:moduleinjector"))
             }
         }
         val commonTest by getting {
@@ -37,20 +33,13 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val androidMain by getting {
-            dependencies {
-                implementation(Dependencies.AndroidX.coreKtx)
-
-                implementation(Dependencies.Compose.ui)
-                implementation(Dependencies.Compose.material)
-                implementation(Dependencies.Compose.toolingPreview)
-                implementation(Dependencies.Lifecycle.lifecycleRuntimeKtx)
-                implementation(Dependencies.Compose.activity)
-
-                implementation(Dependencies.Compose.uiTooling)
-            }
-        }
+        val androidMain by getting
         val androidUnitTest by getting
+
+        val jvmMain by getting {
+            dependsOn(commonMain)
+        }
+
         /*val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting

@@ -3,7 +3,9 @@ plugins {
 }
 
 configureAndroid {
-    namespace = "com.arttttt.hero.api"
+    namespace = "com.arttttt.hero.impl"
+    isComposeEnabled = true
+    isParcelizeEnabled = true
 }
 
 configureKMM()
@@ -15,25 +17,39 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "api"
+            baseName = "impl"
         }
     }*/
 
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":moduleinjector"))
-                implementation(project(":shared:arch"))
-                implementation(project(":shared:heroeslist:api"))
+                implementation(project(":shared:core:arch"))
+                implementation(project(":shared:core:moduleinjector"))
+                implementation(project(":shared:feature:heroeslist:api"))
+                implementation(project(":shared:feature:hero:api"))
+
+                implementation(Dependencies.Coroutines.core)
             }
         }
-
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
             }
         }
-        val androidMain by getting
+        val androidMain by getting {
+            dependencies {
+                implementation(Dependencies.AndroidX.coreKtx)
+
+                implementation(Dependencies.Compose.ui)
+                implementation(Dependencies.Compose.material)
+                implementation(Dependencies.Compose.toolingPreview)
+                implementation(Dependencies.Lifecycle.lifecycleRuntimeKtx)
+                implementation(Dependencies.Compose.activity)
+
+                implementation(Dependencies.Compose.uiTooling)
+            }
+        }
         val androidUnitTest by getting
         /*val iosX64Main by getting
         val iosArm64Main by getting

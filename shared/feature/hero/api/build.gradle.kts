@@ -1,14 +1,12 @@
 plugins {
     kotlin("multiplatform")
-    id("com.android.library")
+}
+
+configureAndroid {
+    namespace = "com.arttttt.hero.api"
 }
 
 configureKMM()
-
-configureAndroid {
-    namespace = "com.arttttt.heroeslist.api"
-    isParcelizeEnabled = true
-}
 
 kotlin {
     /*listOf(
@@ -24,10 +22,12 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":moduleinjector"))
-                implementation(project(":shared:arch"))
+                implementation(project(":shared:core:arch"))
+                implementation(project(":shared:core:moduleinjector"))
+                implementation(project(":shared:feature:heroeslist:api"))
             }
         }
+
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
@@ -35,11 +35,6 @@ kotlin {
         }
         val androidMain by getting
         val androidUnitTest by getting
-
-        val jvmMain by getting {
-            dependsOn(commonMain)
-        }
-
         /*val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting

@@ -1,28 +1,23 @@
 plugins {
     kotlin("multiplatform")
-    id("com.android.library")
+}
+
+configureKMM()
+
+configureAndroid {
+    namespace = "com.arttttt.moduleinjector"
 }
 
 kotlin {
-    android {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = JavaVersion.VERSION_17.toString()
-            }
+    /*listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            baseName = "moduleinjector"
         }
-    }
-
-    jvm()
-
-    /*    listOf(
-            iosX64(),
-            iosArm64(),
-            iosSimulatorArm64()
-        ).forEach {
-            it.binaries.framework {
-                baseName = "arch"
-            }
-        }*/
+    }*/
 
     sourceSets {
         val commonMain by getting
@@ -33,9 +28,6 @@ kotlin {
         }
         val androidMain by getting
         val androidUnitTest by getting
-
-        val jvmMain by getting
-
         /*val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
@@ -54,19 +46,5 @@ kotlin {
             iosArm64Test.dependsOn(this)
             iosSimulatorArm64Test.dependsOn(this)
         }*/
-    }
-}
-
-android {
-    namespace = "com.arttttt.moduleinjector"
-    compileSdk = 33
-
-    defaultConfig {
-        minSdk = 24
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
     }
 }

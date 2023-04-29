@@ -6,7 +6,7 @@ plugins {
 configureKMM()
 
 configureAndroid {
-    namespace = "com.arttttt.heroeslist.impl"
+    namespace = "com.arttttt.root"
     isComposeEnabled = true
     isParcelizeEnabled = true
 }
@@ -18,33 +18,25 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "impl"
+            baseName = "app"
         }
     }*/
 
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":moduleinjector"))
-
-                implementation(project(":shared:arch"))
-                implementation(project(":shared:heroeslist:api"))
+                implementation(project(":shared:core:arch"))
+                implementation(project(":shared:core:moduleinjector"))
+                implementation(project(":shared:feature:heroeslist:api"))
+                implementation(project(":shared:feature:heroeslist:impl"))
+                implementation(project(":shared:feature:hero:api"))
+                implementation(project(":shared:feature:hero:impl"))
 
                 implementation(Dependencies.Coroutines.core)
                 implementation(Dependencies.Decompose.decomposeComposeExtensions)
-
-                implementation("io.ktor:ktor-client-core:2.3.0")
-                implementation("io.ktor:ktor-client-content-negotiation:2.3.0")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
-
-                implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
             }
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
-        }
+
         val androidMain by getting {
             dependencies {
                 implementation(Dependencies.AndroidX.coreKtx)
@@ -57,11 +49,8 @@ kotlin {
 
                 implementation(Dependencies.Compose.uiTooling)
                 //debugImplementation(Dependencies.Compose.uiTooling)
-
-                implementation("io.ktor:ktor-client-android:2.3.0")
             }
         }
-        val androidUnitTest by getting
 
         val jvmMain by getting {
             dependsOn(commonMain)

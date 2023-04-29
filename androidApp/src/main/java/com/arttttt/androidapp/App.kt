@@ -5,8 +5,6 @@ import com.arttttt.hero.api.HeroFeatureDependencies
 import com.arttttt.hero.impl.HeroComponentHolder
 import com.arttttt.heroeslist.api.HeroesListFeatureDependencies
 import com.arttttt.heroeslist.impl.HeroesListComponentHolder
-import com.arttttt.moduleinjector.BaseDependencyHolder
-import com.arttttt.moduleinjector.BaseFeatureDependencies
 import com.arttttt.moduleinjector.dependencyHolder0
 
 class App : Application() {
