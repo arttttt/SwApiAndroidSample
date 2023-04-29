@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 import com.arttttt.heroeslist.impl.ui.list.lazylist.HeroLazyListDelegate
 import com.arttttt.heroeslist.impl.ui.list.lazylist.ProgressAdapterDelegate
 import com.arttttt.arch.view.AndroidAbstractComponentView
@@ -48,6 +49,9 @@ internal actual class HeroesListViewImpl actual constructor(
                 items = model.items
             )
         }
+
+        val dialogs = component.dialogSlot.subscribeAsState()
+        dialogs.value.child?.instance?.view?.Content(Modifier)
     }
 
     @Composable
@@ -62,6 +66,9 @@ internal actual class HeroesListViewImpl actual constructor(
                     onClick = { name ->
                         dispatch(HeroesListView.UiEvent.HeroClicked(name))
                     },
+                    onLongPressed = { name ->
+                        dispatch(HeroesListView.UiEvent.ShowInfoClicked(name))
+                    }
                 ),
                 ProgressAdapterDelegate(),
             ),

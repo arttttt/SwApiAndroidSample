@@ -14,5 +14,6 @@ internal interface HeroesListView : ComponentView<HeroesListView.Model, HeroesLi
 
         data class HeroClicked(val name: String) : UiEvent()
         object NewPageRequired : UiEvent()
+        data class ShowInfoClicked(val name: String) : UiEvent()
     }
 }

@@ -45,7 +45,7 @@ class RootComponentImpl(
 
     override val view: RootComponentView by ViewOwner.create {
         RootComponentViewImpl(
-            this
+            component = this,
         )
     }::view
 

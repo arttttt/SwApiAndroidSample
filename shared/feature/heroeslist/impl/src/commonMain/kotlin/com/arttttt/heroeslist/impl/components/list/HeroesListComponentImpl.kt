@@ -2,6 +2,14 @@ package com.arttttt.heroeslist.impl.components.list
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
+import com.arkivanov.decompose.router.slot.ChildSlot
+import com.arkivanov.decompose.router.slot.SlotNavigation
+import com.arkivanov.decompose.router.slot.activate
+import com.arkivanov.decompose.router.slot.childSlot
+import com.arkivanov.decompose.router.slot.dismiss
+import com.arkivanov.decompose.value.Value
+import com.arkivanov.essenty.parcelable.Parcelable
+import com.arkivanov.essenty.parcelable.Parcelize
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
 import com.arkivanov.mvikotlin.extensions.coroutines.bind
 import com.arkivanov.mvikotlin.extensions.coroutines.states
@@ -11,7 +19,11 @@ import com.arttttt.arch.events.EventsProducer
 import com.arttttt.arch.events.EventsProducerDelegate
 import com.arttttt.arch.view.ListItem
 import com.arttttt.arch.view.ViewOwner
+import com.arttttt.heroeslist.api.Hero
 import com.arttttt.heroeslist.api.HeroesListComponent
+import com.arttttt.heroeslist.impl.asStateFlow
+import com.arttttt.heroeslist.impl.components.heroinfo.HeroInfoComponent
+import com.arttttt.heroeslist.impl.components.heroinfo.HeroInfoComponentImpl
 import com.arttttt.heroeslist.impl.components.toolbar.HeroesListToolbarComponentImpl
 import com.arttttt.heroeslist.impl.data.repository.HeroesListRepositoryImpl
 import com.arttttt.heroeslist.impl.domain.store.HeroesListStore
@@ -23,7 +35,9 @@ import com.arttttt.heroeslist.impl.ui.list.models.ProgressListItem
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 
 internal class HeroesListComponentImpl(
     componentContext: ComponentContext,
@@ -32,6 +46,28 @@ internal class HeroesListComponentImpl(
     HeroesListComponent,
     ViewOwner<HeroesListView>,
     EventsProducer<HeroesListComponent.Event> by eventsDelegate {
+
+    sealed class DialogConfig : Parcelable {
+        @Parcelize
+        data class HeroInfo(
+            val hero: Hero,
+        ) : DialogConfig()
+    }
+
+    private val dialogNavigation = SlotNavigation<DialogConfig>()
+
+    private val _dialog = childSlot(
+        source = dialogNavigation,
+    ) { config, componentContext ->
+        when (config) {
+            is DialogConfig.HeroInfo -> HeroInfoComponentImpl(
+                componentContext = componentContext,
+                hero = config.hero,
+            )
+        }
+    }
+
+    override val dialogSlot: Value<ChildSlot<*, ViewOwner<*>>> = _dialog
 
     override val toolbarComponent = HeroesListToolbarComponentImpl(
         componentContext = childContext(
@@ -88,14 +124,39 @@ internal class HeroesListComponentImpl(
             view
                 .events
                 .filterIsInstance<HeroesListView.UiEvent.HeroClicked>()
-                .map { event ->
+                .mapNotNull { event ->
                     store.state.heroes.find { it.name == event.name }
                 }
-                .filterNotNull()
                 .map { hero ->
                     HeroesListComponent.Event.HeroClicked(hero)
                 }
                 .bindTo(eventsDelegate::dispatch)
+
+            view
+                .events
+                .filterIsInstance<HeroesListView.UiEvent.ShowInfoClicked>()
+                .mapNotNull { event ->
+                    store.state.heroes.find { it.name == event.name }
+                }
+                .bindTo { hero ->
+                    dialogNavigation.activate(
+                        DialogConfig.HeroInfo(
+                            hero = hero,
+                        )
+                    )
+                }
+
+            dialogSlot
+                .asStateFlow()
+                .mapNotNull { value -> value.child?.instance }
+                .filterIsInstance<HeroInfoComponent>()
+                .flatMapLatest { component ->
+                    component.events
+                }
+                .filterIsInstance<HeroInfoComponent.Event.Dismissed>()
+                .bindTo {
+                    dialogNavigation.dismiss()
+                }
         }
     }
 }
