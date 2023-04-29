@@ -37,7 +37,7 @@ internal actual class HeroesListViewImpl actual constructor(
         val lazyListState = rememberLazyListState()
 
         val lazyListDelegatesManager = rememberLazyListDelegateManager(
-            delegates = listOf(
+            delegates = persistentListOf(
                 HeroLazyListDelegate(
                     onClick = { name ->
                         dispatch(HeroesListView.UiEvent.HeroClicked(name))

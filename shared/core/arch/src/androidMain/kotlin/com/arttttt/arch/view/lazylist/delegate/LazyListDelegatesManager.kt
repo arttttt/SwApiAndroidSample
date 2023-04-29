@@ -2,11 +2,13 @@ package com.arttttt.arch.view.lazylist.delegate
 
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.arttttt.arch.view.ListItem
+import kotlinx.collections.immutable.ImmutableList
 
 class LazyListDelegatesManager(
-    private val delegates: List<LazyListDelegate<*>>
+    private val delegates: ImmutableList<LazyListDelegate<ListItem>>
 ) {
 
     companion object {
@@ -15,30 +17,34 @@ class LazyListDelegatesManager(
     }
 
     fun getKey(item: ListItem): Any {
-        return getDelegateOrThrow(item).key
+        return getDelegateOrThrow(item).getKey(item)
     }
 
     fun getContentType(item: ListItem): Any {
-        return getDelegateOrThrow(item).contentType
+        return getDelegateOrThrow(item).getContentType(item)
     }
 
     @Composable
     fun Content(context: LazyItemScope, item: ListItem, modifier: Modifier) {
-        val delegate = getDelegateOrThrow(item)
+        val delegate = remember(item) {
+            getDelegateOrThrow(item)
+        }
 
-        delegate.Content(
+        val holder = remember(delegate) {
+            delegate.createViewHolder(item)
+        }
+
+        holder.Content(
             context = context,
             modifier = modifier,
         )
     }
 
-    private fun getDelegateOrThrow(item: ListItem): LazyListDelegate<*> {
+    private fun getDelegateOrThrow(item: ListItem): LazyListDelegate<ListItem> {
         val delegate = delegates.find { delegate -> delegate.isForItem(item) }
         checkNotNull(delegate) {
             NO_DELEGATE_EXCEPTION.format(item::class.qualifiedName)
         }
-
-        delegate._item = item
 
         return delegate
     }

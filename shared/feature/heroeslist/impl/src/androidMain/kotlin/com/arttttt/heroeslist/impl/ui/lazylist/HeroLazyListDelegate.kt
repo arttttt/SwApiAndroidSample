@@ -18,7 +18,6 @@ internal fun HeroLazyListDelegate(
         modifier = Modifier
             .fillParentMaxWidth()
             .clickable {
-                val asds = item
                 onClick.invoke(item.name)
             }
             .padding(
