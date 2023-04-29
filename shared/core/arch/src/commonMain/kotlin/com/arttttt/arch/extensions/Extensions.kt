@@ -1,9 +1,16 @@
-package com.arttttt.root
+package com.arttttt.arch.extensions
 
+import com.arkivanov.decompose.router.slot.ChildSlot
+import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
+import com.arttttt.arch.events.EventsProducer
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlin.coroutines.cancellation.CancellationException
 
 inline fun <R> Result<R>.finally(
@@ -43,4 +50,20 @@ private class ValueStateFlow<out T : Any>(
             v.unsubscribe(observer)
         }
     }
+}
+
+fun<E : Any> Value<ChildStack<*, *>>.stackComponentEvents(): Flow<E> {
+    return this
+        .asStateFlow()
+        .map { stack -> stack.active.instance }
+        .filterIsInstance<EventsProducer<E>>()
+        .flatMapLatest { component -> component.events }
+}
+
+fun<E : Any> Value<ChildSlot<*, *>>.slotComponentEvents(): Flow<E> {
+    return this
+        .asStateFlow()
+        .map { stack -> stack.child?.instance }
+        .filterIsInstance<EventsProducer<E>>()
+        .flatMapLatest { component -> component.events }
 }

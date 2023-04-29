@@ -10,10 +10,10 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.parcelable.Parcelize
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
 import com.arkivanov.mvikotlin.extensions.coroutines.bind
-import com.arttttt.root.asStateFlow
 import com.arttttt.arch.component.ComponentFactory
 import com.arttttt.arch.component.Configuration
 import com.arttttt.arch.component.DecomposeComponent
+import com.arttttt.arch.extensions.stackComponentEvents
 import com.arttttt.arch.view.ViewOwner
 import com.arttttt.hero.api.HeroComponent
 import com.arttttt.hero.impl.HeroComponentHolder
@@ -23,8 +23,6 @@ import com.arttttt.root.root.view.RootComponentView
 import com.arttttt.root.root.view.RootComponentViewImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 
 class RootComponentImpl(
     componentContext: ComponentContext,
@@ -76,20 +74,14 @@ class RootComponentImpl(
         ) {
 
             _childStack
-                .asStateFlow()
-                .map { stack -> stack.active.instance }
-                .filterIsInstance<HeroComponent>()
-                .flatMapLatest { component -> component.events }
+                .stackComponentEvents<HeroComponent.Event>()
                 .filterIsInstance<HeroComponent.Event.BackPressed>()
                 .bindTo {
                     navigation.pop()
                 }
 
             _childStack
-                .asStateFlow()
-                .map { stack -> stack.active.instance }
-                .filterIsInstance<HeroesListComponent>()
-                .flatMapLatest { component -> component.events }
+                .stackComponentEvents<HeroesListComponent.Event>()
                 .filterIsInstance<HeroesListComponent.Event.HeroClicked>()
                 .bindTo { event ->
                     navigation.push(Screen.Hero(event.hero))

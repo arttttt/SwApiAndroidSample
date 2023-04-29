@@ -17,11 +17,11 @@ import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.arttttt.arch.events.EventsProducer
 import com.arttttt.arch.events.EventsProducerDelegate
+import com.arttttt.arch.extensions.slotComponentEvents
 import com.arttttt.arch.view.ListItem
 import com.arttttt.arch.view.ViewOwner
 import com.arttttt.heroeslist.api.Hero
 import com.arttttt.heroeslist.api.HeroesListComponent
-import com.arttttt.heroeslist.impl.asStateFlow
 import com.arttttt.heroeslist.impl.components.heroinfo.HeroInfoComponent
 import com.arttttt.heroeslist.impl.components.heroinfo.HeroInfoComponentImpl
 import com.arttttt.heroeslist.impl.components.toolbar.HeroesListToolbarComponentImpl
@@ -34,8 +34,6 @@ import com.arttttt.heroeslist.impl.ui.list.models.HeroListItem
 import com.arttttt.heroeslist.impl.ui.list.models.ProgressListItem
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 
@@ -147,12 +145,7 @@ internal class HeroesListComponentImpl(
                 }
 
             dialogSlot
-                .asStateFlow()
-                .mapNotNull { value -> value.child?.instance }
-                .filterIsInstance<HeroInfoComponent>()
-                .flatMapLatest { component ->
-                    component.events
-                }
+                .slotComponentEvents<HeroInfoComponent.Event>()
                 .filterIsInstance<HeroInfoComponent.Event.Dismissed>()
                 .bindTo {
                     dialogNavigation.dismiss()
