@@ -13,8 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextAlign
 import com.arttttt.arch.view.AndroidAbstractComponentView
+import com.arttttt.hero.api.HeroView
 
-internal actual class HeroViewImpl : AndroidAbstractComponentView<HeroView.Model, HeroView.UiEvent>(),
+class HeroViewImpl : AndroidAbstractComponentView<HeroView.Model, HeroView.UiEvent>(),
     HeroView {
 
     override val initialState: HeroView.Model = HeroView.Model(

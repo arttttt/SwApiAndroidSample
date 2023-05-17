@@ -1,6 +1,7 @@
 package com.arttttt.heroeslist.impl.ui.list
 
-import com.arttttt.heroeslist.api.HeroesListComponent
+import com.arttttt.heroeslist.api.components.HeroesListComponent
+import com.arttttt.heroeslist.api.ui.list.HeroesListView
 import kotlinx.coroutines.flow.Flow
 
 internal actual class HeroesListViewImpl actual constructor(component: HeroesListComponent) :

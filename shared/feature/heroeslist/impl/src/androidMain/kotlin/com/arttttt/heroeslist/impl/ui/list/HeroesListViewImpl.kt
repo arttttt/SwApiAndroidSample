@@ -7,6 +7,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
@@ -17,15 +20,17 @@ import com.arttttt.heroeslist.impl.ui.list.lazylist.ProgressAdapterDelegate
 import com.arttttt.arch.view.AndroidAbstractComponentView
 import com.arttttt.arch.view.ListItem
 import com.arttttt.arch.view.lazylist.dsl.rememberLazyListDelegateManager
-import com.arttttt.heroeslist.api.HeroesListComponent
+import com.arttttt.heroeslist.api.components.HeroInfoComponent
+import com.arttttt.heroeslist.api.components.HeroesListComponent
+import com.arttttt.heroeslist.api.ui.list.HeroesListView
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onEach
 
-internal actual class HeroesListViewImpl actual constructor(
-    actual val component: HeroesListComponent
+class HeroesListViewImpl(
+    private val component: HeroesListComponent
 ) : AndroidAbstractComponentView<HeroesListView.Model, HeroesListView.UiEvent>(),
     HeroesListView {
 
@@ -51,7 +56,37 @@ internal actual class HeroesListViewImpl actual constructor(
         }
 
         val dialogs = component.dialogSlot.subscribeAsState()
-        dialogs.value.child?.instance?.view?.Content(Modifier)
+        dialogs.value.child?.instance?.ShowDialog()
+    }
+
+    @Composable
+    private fun HeroInfoComponent.ShowDialog() {
+        AlertDialog(
+            title = {
+                Text(
+                    text = title,
+                )
+            },
+            text = {
+                Text(
+                    text = message,
+                )
+            },
+            onDismissRequest = {
+                onDismissed()
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        onDismissed()
+                    },
+                ) {
+                    Text(
+                        text = "OK",
+                    )
+                }
+            },
+        )
     }
 
     @Composable

@@ -11,7 +11,7 @@ configureAndroid {
 }
 
 kotlin {
-    /*listOf(
+    listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
@@ -19,13 +19,15 @@ kotlin {
         it.binaries.framework {
             baseName = "api"
         }
-    }*/
+    }
 
     sourceSets {
         val commonMain by getting {
             dependencies {
                 implementation(project(":shared:core:arch"))
                 implementation(project(":shared:core:moduleinjector"))
+
+                implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
             }
         }
         val commonTest by getting {
@@ -40,10 +42,14 @@ kotlin {
             dependsOn(commonMain)
         }
 
-        /*val iosX64Main by getting
+        val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
         val iosMain by creating {
+            dependencies {
+                implementation("com.arkivanov.parcelize.darwin:runtime:0.1.4")
+            }
+
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
@@ -57,6 +63,6 @@ kotlin {
             iosX64Test.dependsOn(this)
             iosArm64Test.dependsOn(this)
             iosSimulatorArm64Test.dependsOn(this)
-        }*/
+        }
     }
 }

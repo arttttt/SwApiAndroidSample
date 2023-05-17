@@ -40,6 +40,7 @@ inline fun <reified T : ListItem> lazyListDelegate(
     }
 }
 
+@Suppress("UNCHECKED_CAST")
 @Composable
 fun rememberLazyListDelegateManager(delegates: ImmutableList<LazyListDelegate<*>>): LazyListDelegatesManager {
     return remember(delegates) {

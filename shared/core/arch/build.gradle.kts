@@ -7,18 +7,19 @@ configureKMM()
 configureAndroid {
     namespace = "com.arttttt.arch"
     isComposeEnabled = true
+    isParcelizeEnabled = true
 }
 
 kotlin {
-/*    listOf(
+    listOf(
         iosX64(),
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
     ).forEach {
         it.binaries.framework {
             baseName = "arch"
         }
-    }*/
+    }
 
     sourceSets {
         val commonMain by getting {
@@ -57,15 +58,18 @@ kotlin {
         val jvmMain by getting {
             dependsOn(commonMain)
         }
-/*
-val iosX64Main by getting
+        val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
         val iosMain by creating {
+            dependencies {
+                implementation("com.arkivanov.parcelize.darwin:runtime:0.1.4")
+            }
+
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
-        }*/
+        }
     }
 }

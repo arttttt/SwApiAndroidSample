@@ -1,5 +1,6 @@
 package com.arttttt.hero.impl.ui
 
+import com.arttttt.hero.api.HeroView
 import kotlinx.coroutines.flow.Flow
 
 internal actual class HeroViewImpl : HeroView {

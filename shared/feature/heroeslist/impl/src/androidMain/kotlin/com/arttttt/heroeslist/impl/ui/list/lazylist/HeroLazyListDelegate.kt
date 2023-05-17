@@ -1,10 +1,8 @@
 package com.arttttt.heroeslist.impl.ui.list.lazylist
 
 import androidx.compose.foundation.LocalIndication
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.indication
-import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.padding
@@ -12,11 +10,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.arttttt.arch.view.lazylist.dsl.lazyListDelegate
-import com.arttttt.heroeslist.impl.ui.list.models.HeroListItem
+import com.arttttt.heroeslist.api.ui.list.models.HeroListItem
 import kotlinx.coroutines.launch
 
 internal fun HeroLazyListDelegate(
@@ -24,7 +21,7 @@ internal fun HeroLazyListDelegate(
     onLongPressed: (String) -> Unit,
 ) = lazyListDelegate<HeroListItem>(
     key = { item -> item.name },
-) { modifier ->
+) {
 
     val pressScope = rememberCoroutineScope()
     val interactionSource = remember {

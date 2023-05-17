@@ -2,6 +2,7 @@ import com.android.build.gradle.BaseExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 class AndroidConfig(
@@ -22,6 +23,7 @@ fun Project.configureAndroid(
 
             if (isParcelizeEnabled) {
                 plugins.apply("kotlin-parcelize")
+                plugins.apply("com.arkivanov.parcelize.darwin")
             }
 
             extensions.configure(BaseExtension::class) {

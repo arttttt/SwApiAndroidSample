@@ -1,6 +1,9 @@
 package com.arttttt.moduleinjector
 
-fun<D : BaseFeatureDependencies> dependencyHolder0(
+import kotlin.native.HiddenFromObjC
+
+@HiddenFromObjC
+fun <D : BaseFeatureDependencies> dependencyHolder0(
     block: (BaseDependencyHolder<D>) -> D
 ): D {
     return object : DependencyHolder0<D>() {

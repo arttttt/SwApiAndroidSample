@@ -7,13 +7,13 @@ import com.arttttt.arch.events.EventsProducer
 import com.arttttt.arch.events.EventsProducerDelegate
 import com.arttttt.arch.view.ViewOwner
 import com.arttttt.hero.api.HeroComponent
-import com.arttttt.hero.impl.ui.HeroView
-import com.arttttt.hero.impl.ui.HeroViewImpl
-import com.arttttt.heroeslist.api.Hero
+import com.arttttt.hero.api.HeroView
+import com.arttttt.heroeslist.api.entity.Hero
 import kotlinx.coroutines.flow.filterIsInstance
 
 internal class HeroComponentImpl(
     componentContext: ComponentContext,
+    viewFactory: () -> HeroView,
     hero: Hero,
     private val eventsDelegate: EventsProducerDelegate<HeroComponent.Event> = EventsProducerDelegate()
 ) : ComponentContext by componentContext,
@@ -21,7 +21,7 @@ internal class HeroComponentImpl(
     ViewOwner<HeroView>,
     EventsProducer<HeroComponent.Event> by eventsDelegate {
 
-    override val view: HeroView by ViewOwner.create { HeroViewImpl() }::view
+    override val view: HeroView = viewFactory.invoke()
 
     init {
         view.render(

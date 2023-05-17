@@ -1,3 +1,3 @@
 package com.arttttt.arch.view
 
-interface ListItem
+abstract class ListItem

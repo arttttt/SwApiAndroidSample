@@ -3,7 +3,7 @@ package com.arttttt.heroeslist.impl.domain.store
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
 import com.arkivanov.mvikotlin.core.store.Store
-import com.arttttt.heroeslist.api.Hero
+import com.arttttt.heroeslist.api.entity.Hero
 
 internal interface HeroesListStore : Store<HeroesListStore.Intent, HeroesListStore.State, HeroesListStore.Label> {
     

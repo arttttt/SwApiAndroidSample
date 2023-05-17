@@ -6,7 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.defaultComponentContext
-import com.arttttt.root.root.RootComponentImpl
+import com.arttttt.root.RootComponentImpl
+import com.arttttt.root.view.RootComponentViewImpl
 
 class MainActivity : ComponentActivity() {
 
@@ -15,11 +16,18 @@ class MainActivity : ComponentActivity() {
 
         val rootComponent = RootComponentImpl(
             componentContext = defaultComponentContext(),
+            viewFactory = ::RootComponentViewImpl,
+        )
+
+        val rootComponentView = RootComponentViewImpl(
+            component = rootComponent,
         )
 
         setContent {
             MaterialTheme {
-                rootComponent.view.Content(modifier = Modifier)
+                rootComponentView.Content(
+                    modifier = Modifier,
+                )
             }
         }
     }

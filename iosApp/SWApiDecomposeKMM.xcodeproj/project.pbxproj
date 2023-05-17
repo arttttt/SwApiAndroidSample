@@ -1,0 +1,407 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		558190E22C3E1848D96EE20D /* HeroViewImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5581934DFC38F2B4FF8076B7 /* HeroViewImpl.swift */; };
+		55819307A5B6E5EF6C0DBE61 /* HeroesListViewImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55819219A97F9BADB8781358 /* HeroesListViewImpl.swift */; };
+		5581950C160DD7F814B7D40F /* RootComponentViewImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55819085A7F060EBD11B152C /* RootComponentViewImpl.swift */; };
+		558199D0DA8601DA415EA9D2 /* SwiftUIWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55819C4B829EBE953917794F /* SwiftUIWrapper.swift */; };
+		55819A4AE5C9E300A2C95014 /* ObservableValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55819C4806DCC805957023BC /* ObservableValue.swift */; };
+		55819CCCE3DB2B58B79DF228 /* ComponentHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55819B5CB9AAD2093BFC0C92 /* ComponentHolder.swift */; };
+		B5260ABC29FDF84600C7EB6D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5260ABB29FDF84600C7EB6D /* AppDelegate.swift */; };
+		B55EDCBE29FDDEAC003749BE /* SWApiDecomposeKMMApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55EDCBD29FDDEAC003749BE /* SWApiDecomposeKMMApp.swift */; };
+		B55EDCC229FDDEAE003749BE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B55EDCC129FDDEAE003749BE /* Assets.xcassets */; };
+		B55EDCC529FDDEAE003749BE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B55EDCC429FDDEAE003749BE /* Preview Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		55819085A7F060EBD11B152C /* RootComponentViewImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootComponentViewImpl.swift; sourceTree = "<group>"; };
+		55819219A97F9BADB8781358 /* HeroesListViewImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeroesListViewImpl.swift; sourceTree = "<group>"; };
+		5581934DFC38F2B4FF8076B7 /* HeroViewImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeroViewImpl.swift; sourceTree = "<group>"; };
+		55819B5CB9AAD2093BFC0C92 /* ComponentHolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComponentHolder.swift; sourceTree = "<group>"; };
+		55819C4806DCC805957023BC /* ObservableValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableValue.swift; sourceTree = "<group>"; };
+		55819C4B829EBE953917794F /* SwiftUIWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIWrapper.swift; sourceTree = "<group>"; };
+		B5260ABB29FDF84600C7EB6D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B55EDCBA29FDDEAC003749BE /* SWApiDecomposeKMM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SWApiDecomposeKMM.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B55EDCBD29FDDEAC003749BE /* SWApiDecomposeKMMApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWApiDecomposeKMMApp.swift; sourceTree = "<group>"; };
+		B55EDCC129FDDEAE003749BE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B55EDCC429FDDEAE003749BE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B55EDCB729FDDEAC003749BE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5581903A40C25A418072B045 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				55819085A7F060EBD11B152C /* RootComponentViewImpl.swift */,
+				55819219A97F9BADB8781358 /* HeroesListViewImpl.swift */,
+				5581934DFC38F2B4FF8076B7 /* HeroViewImpl.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		B55EDCB129FDDEAC003749BE = {
+			isa = PBXGroup;
+			children = (
+				B55EDCBC29FDDEAC003749BE /* SWApiDecomposeKMM */,
+				B55EDCBB29FDDEAC003749BE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B55EDCBB29FDDEAC003749BE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B55EDCBA29FDDEAC003749BE /* SWApiDecomposeKMM.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B55EDCBC29FDDEAC003749BE /* SWApiDecomposeKMM */ = {
+			isa = PBXGroup;
+			children = (
+				B55EDCBD29FDDEAC003749BE /* SWApiDecomposeKMMApp.swift */,
+				B55EDCC129FDDEAE003749BE /* Assets.xcassets */,
+				B55EDCC329FDDEAE003749BE /* Preview Content */,
+				B5260ABB29FDF84600C7EB6D /* AppDelegate.swift */,
+				55819B5CB9AAD2093BFC0C92 /* ComponentHolder.swift */,
+				55819C4806DCC805957023BC /* ObservableValue.swift */,
+				55819C4B829EBE953917794F /* SwiftUIWrapper.swift */,
+				5581903A40C25A418072B045 /* views */,
+			);
+			path = SWApiDecomposeKMM;
+			sourceTree = "<group>";
+		};
+		B55EDCC329FDDEAE003749BE /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				B55EDCC429FDDEAE003749BE /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B55EDCB929FDDEAC003749BE /* SWApiDecomposeKMM */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B55EDCC829FDDEAE003749BE /* Build configuration list for PBXNativeTarget "SWApiDecomposeKMM" */;
+			buildPhases = (
+				B55EDCCB29FDDFD7003749BE /* ShellScript */,
+				B55EDCB629FDDEAC003749BE /* Sources */,
+				B55EDCB729FDDEAC003749BE /* Frameworks */,
+				B55EDCB829FDDEAC003749BE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SWApiDecomposeKMM;
+			productName = SWApiDecomposeKMM;
+			productReference = B55EDCBA29FDDEAC003749BE /* SWApiDecomposeKMM.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B55EDCB229FDDEAC003749BE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					B55EDCB929FDDEAC003749BE = {
+						CreatedOnToolsVersion = 14.3;
+					};
+				};
+			};
+			buildConfigurationList = B55EDCB529FDDEAC003749BE /* Build configuration list for PBXProject "SWApiDecomposeKMM" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B55EDCB129FDDEAC003749BE;
+			productRefGroup = B55EDCBB29FDDEAC003749BE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B55EDCB929FDDEAC003749BE /* SWApiDecomposeKMM */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B55EDCB829FDDEAC003749BE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B55EDCC529FDDEAE003749BE /* Preview Assets.xcassets in Resources */,
+				B55EDCC229FDDEAE003749BE /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B55EDCCB29FDDFD7003749BE /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"$SRCROOT/..\"\n\n// just print build type\necho ${CONFIGURATION}\n\n./gradlew :iosframework:embedAndSignAppleFrameworkForXcode\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B55EDCB629FDDEAC003749BE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5260ABC29FDF84600C7EB6D /* AppDelegate.swift in Sources */,
+				B55EDCBE29FDDEAC003749BE /* SWApiDecomposeKMMApp.swift in Sources */,
+				55819CCCE3DB2B58B79DF228 /* ComponentHolder.swift in Sources */,
+				55819A4AE5C9E300A2C95014 /* ObservableValue.swift in Sources */,
+				558199D0DA8601DA415EA9D2 /* SwiftUIWrapper.swift in Sources */,
+				5581950C160DD7F814B7D40F /* RootComponentViewImpl.swift in Sources */,
+				55819307A5B6E5EF6C0DBE61 /* HeroesListViewImpl.swift in Sources */,
+				558190E22C3E1848D96EE20D /* HeroViewImpl.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B55EDCC629FDDEAE003749BE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B55EDCC729FDDEAE003749BE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B55EDCC929FDDEAE003749BE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SWApiDecomposeKMM/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../iosframework/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					shared,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.arttttt.SWApiDecomposeKMM;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B55EDCCA29FDDEAE003749BE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SWApiDecomposeKMM/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../iosframework/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					shared,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.arttttt.SWApiDecomposeKMM;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B55EDCB529FDDEAC003749BE /* Build configuration list for PBXProject "SWApiDecomposeKMM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B55EDCC629FDDEAE003749BE /* Debug */,
+				B55EDCC729FDDEAE003749BE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B55EDCC829FDDEAE003749BE /* Build configuration list for PBXNativeTarget "SWApiDecomposeKMM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B55EDCC929FDDEAE003749BE /* Debug */,
+				B55EDCCA29FDDEAE003749BE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B55EDCB229FDDEAC003749BE /* Project object */;
+}

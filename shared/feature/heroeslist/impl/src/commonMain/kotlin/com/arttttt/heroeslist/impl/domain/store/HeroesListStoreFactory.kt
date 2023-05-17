@@ -15,7 +15,7 @@ internal class HeroesListStoreFactory(
     private val instanceKeeper: InstanceKeeper
 ) {
     fun create(): HeroesListStore {
-        val stateKey = HeroesListStore::class.java.name
+        val stateKey = HeroesListStore::class.qualifiedName!!
         
         val store = instanceKeeper.getStore {
             

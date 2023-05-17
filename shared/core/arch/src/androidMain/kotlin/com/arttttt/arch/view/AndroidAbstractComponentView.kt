@@ -10,9 +10,9 @@ import com.arttttt.arch.component.DecomposeComponent
 import com.arttttt.arch.events.EventsProducer
 import com.arttttt.arch.events.EventsProducerDelegate
 
-abstract class AndroidAbstractComponentView<Model: Any, Event: Any> private constructor(
+abstract class AndroidAbstractComponentView<Model : Any, Event : Any> private constructor(
     private val eventsProducerDelegate: EventsProducerDelegate<Event>,
-): ComponentView<Model, Event>, EventsProducer<Event> by eventsProducerDelegate {
+) : ComponentView<Model, Event>, EventsProducer<Event> by eventsProducerDelegate {
 
     constructor() : this(
         eventsProducerDelegate = EventsProducerDelegate(),

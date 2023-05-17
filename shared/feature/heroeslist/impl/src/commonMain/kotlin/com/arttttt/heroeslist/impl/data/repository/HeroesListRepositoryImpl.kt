@@ -2,7 +2,7 @@ package com.arttttt.heroeslist.impl.data.repository
 
 import com.arttttt.heroeslist.impl.data.network.api.HeroesListApi
 import com.arttttt.heroeslist.impl.data.network.model.HeroesApiResponse
-import com.arttttt.heroeslist.api.Hero
+import com.arttttt.heroeslist.api.entity.Hero
 import com.arttttt.heroeslist.impl.domain.repository.HeroesListRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

@@ -52,7 +52,7 @@ private class ValueStateFlow<out T : Any>(
     }
 }
 
-fun<E : Any> Value<ChildStack<*, *>>.stackComponentEvents(): Flow<E> {
+fun <E : Any> Value<ChildStack<*, *>>.stackComponentEvents(): Flow<E> {
     return this
         .asStateFlow()
         .map { stack -> stack.active.instance }
@@ -60,7 +60,7 @@ fun<E : Any> Value<ChildStack<*, *>>.stackComponentEvents(): Flow<E> {
         .flatMapLatest { component -> component.events }
 }
 
-fun<E : Any> Value<ChildSlot<*, *>>.slotComponentEvents(): Flow<E> {
+fun <E : Any> Value<ChildSlot<*, *>>.slotComponentEvents(): Flow<E> {
     return this
         .asStateFlow()
         .map { stack -> stack.child?.instance }

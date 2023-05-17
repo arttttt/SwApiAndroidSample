@@ -1,13 +1,11 @@
 package com.arttttt.moduleinjector
 
-interface BaseFeatureDependencies {
-    val dependencyHolder: BaseDependencyHolder<out BaseFeatureDependencies>
-}
+interface BaseFeatureDependencies
 
 interface BaseFeatureApi
 
-interface ComponentHolder<A : BaseFeatureApi, D : BaseFeatureDependencies> {
-    var dependencyProvider: (() -> D)?
-    val api: A
+abstract class ComponentHolder<A : BaseFeatureApi, D : BaseFeatureDependencies> {
+    abstract var dependencyProvider: (() -> D)?
+    abstract val api: A
 }
 

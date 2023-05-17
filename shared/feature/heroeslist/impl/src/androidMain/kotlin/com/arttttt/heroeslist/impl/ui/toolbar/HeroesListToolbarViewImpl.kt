@@ -5,9 +5,9 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.arttttt.arch.view.AndroidAbstractComponentView
+import com.arttttt.heroeslist.api.ui.HeroesListToolbarView
 
-internal actual class HeroesListToolbarViewImpl actual constructor() :
-    AndroidAbstractComponentView<HeroesListToolbarView.Model, Unit>(),
+class HeroesListToolbarViewImpl : AndroidAbstractComponentView<HeroesListToolbarView.Model, Unit>(),
     HeroesListToolbarView {
 
     override val initialState = HeroesListToolbarView.Model(

@@ -15,3 +15,13 @@ setup(
         jvm()
     }
 )
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    
+    dependencies {
+        classpath("com.arkivanov.parcelize.darwin:gradle-plugin:0.1.4")
+    }
+}

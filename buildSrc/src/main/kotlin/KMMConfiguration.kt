@@ -19,5 +19,10 @@ fun Project.configureKMM() {
                 }
             }
         }
+
+        sourceSets.all {
+            languageSettings.optIn("kotlin.experimental.ExperimentalObjCRefinement")
+            languageSettings.optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+        }
     }
 }

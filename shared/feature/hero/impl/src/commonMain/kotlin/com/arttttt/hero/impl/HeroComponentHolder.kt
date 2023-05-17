@@ -5,11 +5,13 @@ import com.arttttt.hero.api.HeroFeatureDependencies
 import com.arttttt.moduleinjector.ComponentHolder
 import com.arttttt.moduleinjector.ComponentHolderDelegate
 
-object HeroComponentHolder : ComponentHolder<HeroFeatureApi, HeroFeatureDependencies> {
+object HeroComponentHolder : ComponentHolder<HeroFeatureApi, HeroFeatureDependencies>() {
 
-    private val delegate = ComponentHolderDelegate { _: HeroFeatureDependencies ->
+    private val delegate = ComponentHolderDelegate { dependencies: HeroFeatureDependencies ->
         object : HeroFeatureApi {
-            override val heroComponentBuilder = HeroComponentBuilderImpl()
+            override val heroComponentBuilder = HeroComponentBuilderImpl(
+                viewFactory = dependencies.heroViewFactory
+            )
         }
     }
 

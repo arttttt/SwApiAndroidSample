@@ -20,18 +20,18 @@ import com.arttttt.arch.events.EventsProducerDelegate
 import com.arttttt.arch.extensions.slotComponentEvents
 import com.arttttt.arch.view.ListItem
 import com.arttttt.arch.view.ViewOwner
-import com.arttttt.heroeslist.api.Hero
-import com.arttttt.heroeslist.api.HeroesListComponent
-import com.arttttt.heroeslist.impl.components.heroinfo.HeroInfoComponent
+import com.arttttt.heroeslist.api.components.HeroesListComponent
+import com.arttttt.heroeslist.api.entity.Hero
+import com.arttttt.heroeslist.api.ui.HeroesListToolbarView
+import com.arttttt.heroeslist.api.ui.list.HeroesListView
+import com.arttttt.heroeslist.api.components.HeroInfoComponent
 import com.arttttt.heroeslist.impl.components.heroinfo.HeroInfoComponentImpl
 import com.arttttt.heroeslist.impl.components.toolbar.HeroesListToolbarComponentImpl
 import com.arttttt.heroeslist.impl.data.repository.HeroesListRepositoryImpl
 import com.arttttt.heroeslist.impl.domain.store.HeroesListStore
 import com.arttttt.heroeslist.impl.domain.store.HeroesListStoreFactory
-import com.arttttt.heroeslist.impl.ui.list.HeroesListView
-import com.arttttt.heroeslist.impl.ui.list.HeroesListViewImpl
-import com.arttttt.heroeslist.impl.ui.list.models.HeroListItem
-import com.arttttt.heroeslist.impl.ui.list.models.ProgressListItem
+import com.arttttt.heroeslist.api.ui.list.models.HeroListItem
+import com.arttttt.heroeslist.api.ui.list.models.ProgressListItem
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
@@ -39,7 +39,9 @@ import kotlinx.coroutines.flow.mapNotNull
 
 internal class HeroesListComponentImpl(
     componentContext: ComponentContext,
-    private val eventsDelegate: EventsProducerDelegate<HeroesListComponent.Event> = EventsProducerDelegate()
+    listViewFactory: (HeroesListComponent) -> HeroesListView,
+    toolbarViewFactory: () -> HeroesListToolbarView,
+    private val eventsDelegate: EventsProducerDelegate<HeroesListComponent.Event> = EventsProducerDelegate(),
 ) : ComponentContext by componentContext,
     HeroesListComponent,
     ViewOwner<HeroesListView>,
@@ -65,15 +67,16 @@ internal class HeroesListComponentImpl(
         }
     }
 
-    override val dialogSlot: Value<ChildSlot<*, ViewOwner<*>>> = _dialog
+    override val dialogSlot: Value<ChildSlot<*, HeroInfoComponent>> = _dialog
 
     override val toolbarComponent = HeroesListToolbarComponentImpl(
         componentContext = childContext(
             key = "toolbar_component",
         ),
+        viewFactory = toolbarViewFactory,
     )
 
-    override val view: HeroesListView by ViewOwner.create { HeroesListViewImpl(this) }::view
+    override val view: HeroesListView = listViewFactory.invoke(this)
 
     init {
         val store = HeroesListStoreFactory(
